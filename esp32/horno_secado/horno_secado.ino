@@ -37,8 +37,8 @@
  * Durante una emergencia o falla el tiempo de secado queda en pausa.
  *
  * Comandos por monitor serial (115200 baudios, con salto de línea):
- *   15 | 30 | 60   cambia el modo de secado (minutos)
- *   ?              muestra la ayuda
+ *   5 | 15 | 30 | 45 | 60   cambia el modo de secado (minutos)
+ *   ?                        muestra la ayuda
  */
 #include "config.h"
 #include "src/SensorDHT22.h"
@@ -180,11 +180,21 @@ void actualizarTiempo(unsigned long delta) {
 // ============================================================
 // Monitor serial
 // ============================================================
+bool esModoValido(int minutos) {
+  for (uint8_t i = 0; i < CANTIDAD_MODOS; i++) {
+    if (MODOS_MINUTOS[i] == minutos) return true;
+  }
+  return false;
+}
+
 void mostrarAyuda() {
   Serial.println("Comandos:");
-  Serial.printf("  %u | %u | %u  -> modo de secado en minutos\n",
-                MODO_CORTO, MODO_NORMAL, MODO_LARGO);
-  Serial.println("  ?            -> esta ayuda");
+  Serial.print("  ");
+  for (uint8_t i = 0; i < CANTIDAD_MODOS; i++) {
+    Serial.printf(i == 0 ? "%u" : " | %u", MODOS_MINUTOS[i]);
+  }
+  Serial.println("  -> modo de secado en minutos");
+  Serial.println("  ?  -> esta ayuda");
 }
 
 void procesarComando(String cmd) {
@@ -197,7 +207,7 @@ void procesarComando(String cmd) {
   }
 
   int minutos = cmd.toInt();
-  if (minutos == MODO_CORTO || minutos == MODO_NORMAL || minutos == MODO_LARGO) {
+  if (esModoValido(minutos)) {
     modoMinutos = minutos;
     Serial.printf("[COMANDO] Modo de secado: %u min\n", modoMinutos);
   } else {
