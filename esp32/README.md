@@ -118,5 +118,5 @@ ciclo en curso.
 
 | Comando        | Acción                               |
 |----------------|--------------------------------------|
-| `15`, `30`, `60` | Cambia el modo de secado (minutos) |
+| `5`, `15`, `30`, `45`, `60` | Cambia el modo de secado (minutos) |
 | `?`            | Muestra la ayuda                     |
