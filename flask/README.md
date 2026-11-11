@@ -87,7 +87,7 @@ journalctl -u horno -f   # ver el registro
 | Método | Ruta                         | Descripción                                   |
 |--------|------------------------------|-----------------------------------------------|
 | GET    | `/api/estado`                | Último JSON del ESP32 y estado de la conexión |
-| POST   | `/api/modo`                  | `{"minutos": 15 \| 30 \| 60}` cambia el modo   |
+| POST   | `/api/modo`                  | `{"minutos": 5 \| 15 \| 30 \| 45 \| 60}` cambia el modo |
 | GET    | `/api/historial?horas=1`     | Lecturas guardadas (1, 6 o 24 h)              |
 | GET    | `/api/eventos?limite=50`     | Últimos cambios de estado                     |
 | GET    | `/api/ciclos?limite=50`      | Últimos ciclos de secado                      |

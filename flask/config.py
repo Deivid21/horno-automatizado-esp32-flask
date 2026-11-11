@@ -47,7 +47,7 @@ DIAS_RETENCION = 30         # las lecturas más antiguas se borran al iniciar
 DATOS_VENCIDOS_S = 10
 
 # Deben coincidir con config.h del ESP32
-MODOS_MINUTOS = (15, 30, 60)
+MODOS_MINUTOS = (5, 15, 30, 45, 60)
 TEMP_OBJETIVO = 30.0
 DS18B20_TEMP_EMERGENCIA = 70.0
 GAS_UMBRAL = 1500
