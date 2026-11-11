@@ -1,0 +1,19 @@
+# Arduino / PlatformIO
+build/
+.pio/
+*.bin
+*.elf
+
+# Python / Flask
+__pycache__/
+*.pyc
+venv/
+.venv/
+.env
+*.db
+
+# Editores y sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
