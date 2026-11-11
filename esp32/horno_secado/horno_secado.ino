@@ -241,6 +241,37 @@ void reporteSerial() {
   actuadores.imprimir();
 }
 
+// Formatea un float para JSON (NaN -> null)
+void jsonFloat(char* buf, size_t len, float valor) {
+  if (isnan(valor)) snprintf(buf, len, "null");
+  else              snprintf(buf, len, "%.1f", valor);
+}
+
+// Una línea JSON por reporte: la lee el servidor Flask de la Raspberry Pi.
+// Las líneas que no empiezan con '{' son para lectura humana y Flask las ignora.
+void enviarJSON() {
+  char temp[12], hum[12], tempDs[12], dist[12];
+  jsonFloat(temp,   sizeof(temp),   dht22.temperatura());
+  jsonFloat(hum,    sizeof(hum),    dht22.humedad());
+  jsonFloat(tempDs, sizeof(tempDs), ds18b20.temperatura());
+  jsonFloat(dist,   sizeof(dist),   presencia.distancia() < 0 ? NAN : presencia.distancia());
+
+  long restante = (presencia.hayObjeto() && estado != Estado::SECADO_COMPLETO) ? restanteSeg() : -1;
+
+  Serial.printf("{\"temp\":%s,\"hum\":%s,\"temp_ds\":%s,\"dist\":%s,\"objeto\":%s,"
+                "\"gas\":%d,\"gas_calentando\":%s,\"estado\":\"%s\",\"modo\":%u,"
+                "\"restante\":%ld,\"ventilador\":%s,\"calefactor\":%s,"
+                "\"calefactor_instalado\":%s,\"uptime\":%lu}\n",
+                temp, hum, tempDs, dist,
+                presencia.hayObjeto() ? "true" : "false",
+                gas.valor(), gas.calentando() ? "true" : "false",
+                nombreEstado(estado), modoMinutos, restante,
+                actuadores.ventiladorEncendido() ? "true" : "false",
+                actuadores.calefactorEncendido() ? "true" : "false",
+                CALEFACTOR_INSTALADO ? "true" : "false",
+                millis() / 1000);
+}
+
 void actualizarPantalla() {
   DatosPantalla d;
   d.temperatura = dht22.temperatura();
@@ -310,5 +341,6 @@ void loop() {
   if (ahora - ultimoReporte >= INTERVALO_REPORTE_MS) {
     ultimoReporte = ahora;
     reporteSerial();
+    enviarJSON();
   }
 }
