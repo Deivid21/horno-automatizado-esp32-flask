@@ -37,7 +37,8 @@
  * Durante una emergencia o falla el tiempo de secado queda en pausa.
  *
  * Comandos por monitor serial (115200 baudios, con salto de línea):
- *   5 | 15 | 30 | 45 | 60   cambia el modo de secado (minutos)
+ *   5 | 15 | 30 | 45 | 60   modos de secado (minutos)
+ *   1 a 180                  tiempo personalizado (minutos)
  *   ?                        muestra la ayuda
  */
 #include "config.h"
@@ -180,11 +181,9 @@ void actualizarTiempo(unsigned long delta) {
 // ============================================================
 // Monitor serial
 // ============================================================
+// Acepta los modos fijos y cualquier tiempo personalizado dentro del rango
 bool esModoValido(int minutos) {
-  for (uint8_t i = 0; i < CANTIDAD_MODOS; i++) {
-    if (MODOS_MINUTOS[i] == minutos) return true;
-  }
-  return false;
+  return minutos >= MODO_MIN_MINUTOS && minutos <= MODO_MAX_MINUTOS;
 }
 
 void mostrarAyuda() {
@@ -193,7 +192,8 @@ void mostrarAyuda() {
   for (uint8_t i = 0; i < CANTIDAD_MODOS; i++) {
     Serial.printf(i == 0 ? "%u" : " | %u", MODOS_MINUTOS[i]);
   }
-  Serial.println("  -> modo de secado en minutos");
+  Serial.println("  -> modos de secado (minutos)");
+  Serial.printf("  %u a %u  -> tiempo personalizado (minutos)\n", MODO_MIN_MINUTOS, MODO_MAX_MINUTOS);
   Serial.println("  ?  -> esta ayuda");
 }
 

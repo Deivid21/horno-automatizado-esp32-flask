@@ -54,11 +54,14 @@ constexpr bool CALEFACTOR_INSTALADO = false;
 constexpr bool VENTILADOR_EN_EMERGENCIA = false;
 
 // ============================================================
-// Modos de secado (minutos). Se cambian escribiendo el número en el monitor serial
+// Modos de secado (minutos). Se cambian escribiendo el número en el monitor serial.
+// Además de los modos fijos se acepta cualquier tiempo personalizado dentro del rango.
 // ============================================================
 constexpr uint8_t MODOS_MINUTOS[]  = { 5, 15, 30, 45, 60 };
 constexpr uint8_t CANTIDAD_MODOS   = sizeof(MODOS_MINUTOS) / sizeof(MODOS_MINUTOS[0]);
 constexpr uint8_t MODO_POR_DEFECTO = 30;
+constexpr uint8_t MODO_MIN_MINUTOS = 1;    // tiempo personalizado mínimo
+constexpr uint8_t MODO_MAX_MINUTOS = 180;  // tiempo personalizado máximo (3 h)
 
 // ============================================================
 // Seguridad: DS18B20
