@@ -28,6 +28,8 @@ import random
 import threading
 import time
 
+import config
+
 from .monitor import Monitor
 
 log = logging.getLogger(__name__)
@@ -52,7 +54,7 @@ class Simulador(threading.Thread):
         return True
 
     def enviar(self, comando: str) -> bool:
-        if comando.isdigit() and int(comando) in (15, 30, 60):
+        if comando.isdigit() and int(comando) in config.MODOS_MINUTOS:
             self.modo = int(comando)
             log.info("[demo] Modo de secado: %s min", self.modo)
         return True
