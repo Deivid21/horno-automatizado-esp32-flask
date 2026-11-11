@@ -1,0 +1,111 @@
+{#
+  For more Support see: https://t.me/Deivid21Hub
+
+  Copyright (C) 1996 - 2026 INACAP
+  Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+#}
+{% extends "base.html" %}
+
+{% block contenido %}
+<section class="hero">
+  <div class="container hero-row">
+    <div>
+      <p class="eyebrow" data-i18n="eyebrow">INACAP · Secado de endoscopios</p>
+      <h1 data-i18n="panel_titulo">Horno de Secado</h1>
+      <p class="lead" data-i18n="panel_lead">Estado en vivo del horno, sensores y salidas.</p>
+    </div>
+    <div class="tags">
+      <span id="tag-demo" class="tag tag-warn" data-i18n="demo" hidden>Demo</span>
+      <span id="tag-conexion" class="tag tag-plain"><span class="dot"></span><span data-i18n="desconectado">Sin conexión</span></span>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div id="alerta" class="alerta" role="alert" hidden>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+    <span id="alerta-texto"></span>
+  </div>
+
+  <section class="card section ciclo">
+    <div>
+      <p class="sensor-label" data-i18n="ciclo">Ciclo de secado</p>
+      <div class="tags"><span id="estado-tag" class="tag tag-plain">--</span></div>
+      <p id="estado-desc" class="muted" data-i18n="sin_datos">Esperando datos del ESP32…</p>
+      <div class="cuenta" id="cuenta">--:--</div>
+      <div class="barra"><span id="progreso"></span></div>
+    </div>
+    <div>
+      <p class="sensor-label" data-i18n="modo">Modo de secado</p>
+      <div class="btn-group modos" id="modos" style="margin-top:8px">
+        {% for m in limites.modos %}
+        <button class="btn" type="button" data-modo="{{ m }}" aria-pressed="false">{{ m }} <span data-i18n="min">min</span></button>
+        {% endfor %}
+      </div>
+      <p id="modo-msg" class="small muted" style="min-height:1.6em;margin:10px 0 0"></p>
+    </div>
+  </section>
+
+  <p class="section-title" data-i18n="sensores">Sensores</p>
+  <section class="grid section">
+    <article class="card">
+      <p class="sensor-label" data-i18n="dht_temp">Temperatura (DHT22)</p>
+      <div class="sensor-valor"><span id="v-temp">--</span><small>°C</small></div>
+      <div class="medidor"><span id="m-temp"></span></div>
+      <div class="sensor-meta"><span><span data-i18n="objetivo">Objetivo</span>: {{ limites.temp_objetivo }} °C</span></div>
+    </article>
+
+    <article class="card">
+      <p class="sensor-label" data-i18n="dht_hum">Humedad (DHT22)</p>
+      <div class="sensor-valor"><span id="v-hum">--</span><small>%</small></div>
+      <div class="medidor"><span id="m-hum"></span></div>
+      <div class="sensor-meta"><span>0 – 100 %</span></div>
+    </article>
+
+    <article class="card">
+      <p class="sensor-label" data-i18n="ds_temp">Seguridad (DS18B20)</p>
+      <div class="sensor-valor"><span id="v-ds">--</span><small>°C</small></div>
+      <div class="medidor"><span id="m-ds"></span></div>
+      <div class="sensor-meta"><span><span data-i18n="limite">Límite</span>: {{ limites.ds18b20_emergencia }} °C</span><span id="e-ds"></span></div>
+    </article>
+
+    <article class="card">
+      <p class="sensor-label" data-i18n="gas">Gas (MQ-2)</p>
+      <div class="sensor-valor"><span id="v-gas">--</span><small>ADC</small></div>
+      <div class="medidor"><span id="m-gas"></span></div>
+      <div class="sensor-meta"><span><span data-i18n="umbral">Umbral</span>: {{ limites.gas_umbral }}</span><span id="e-gas"></span></div>
+    </article>
+
+    <article class="card">
+      <p class="sensor-label" data-i18n="presencia">Presencia (HC-SR04)</p>
+      <div class="sensor-valor" style="font-size:1.4rem;margin:10px 0" id="v-objeto">--</div>
+      <div class="sensor-meta"><span id="v-dist">--</span></div>
+    </article>
+
+    <article class="card">
+      <p class="sensor-label" data-i18n="salidas">Salidas</p>
+      <div class="salidas" style="margin-top:12px">
+        <div class="salida"><span data-i18n="ventilador">Ventilador</span><span id="s-vent" class="tag tag-plain">--</span></div>
+        <div class="salida"><span data-i18n="calefactor">Calefactor</span><span id="s-calef" class="tag tag-plain">--</span></div>
+        <div class="salida small muted"><span data-i18n="uptime">Tiempo encendido del ESP32</span><span id="s-uptime" class="mono">--</span></div>
+      </div>
+    </article>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/panel.js') }}"></script>
+{% endblock %}
