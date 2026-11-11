@@ -33,6 +33,15 @@ que muestra los datos y el estado del horno.
 La documentación del firmware, conexiones y reglas está en
 [`esp32/README.md`](esp32/README.md).
 
+## Licencia
+
+Distribuido bajo la [Licencia Apache 2.0](LICENSE).
+
+Copyright (C) 1996 - 2026 INACAP  
+Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+
+Soporte: [Deivid21Hub](https://t.me/Deivid21Hub)
+
 ## Autor
 
 Deivid Ignacio Parra ([Deivid21](https://github.com/Deivid21))
