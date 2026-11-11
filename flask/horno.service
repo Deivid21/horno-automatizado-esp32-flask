@@ -1,0 +1,21 @@
+# Servicio systemd para iniciar el servidor del horno al encender la Raspberry Pi.
+# Ajusta User y las rutas si el repositorio está en otra carpeta.
+#
+#   sudo cp horno.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now horno
+
+[Unit]
+Description=Horno de Secado para Endoscopios - Servidor Flask
+After=network.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/horno-automatizado-esp32-flask/flask
+Environment=HORNO_PUERTO=/dev/ttyUSB0
+ExecStart=/home/pi/horno-automatizado-esp32-flask/flask/venv/bin/python app.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
