@@ -8,7 +8,7 @@ lo muestra en una interfaz bilingüe (español / inglés) con el estilo de
 
 | Ruta         | Contenido                                                       |
 |--------------|-----------------------------------------------------------------|
-| `/`          | Panel en vivo: estado, cuenta regresiva, sensores, salidas y modo de secado |
+| `/`          | Panel en vivo: estado, cuenta regresiva, sensores, salidas, modo de secado y tiempo personalizado |
 | `/historial` | Gráficos de temperatura, humedad y gas (1 h, 6 h o 24 h)        |
 | `/registro`  | Ciclos de secado y eventos de cambio de estado                  |
 
@@ -87,7 +87,7 @@ journalctl -u horno -f   # ver el registro
 | Método | Ruta                         | Descripción                                   |
 |--------|------------------------------|-----------------------------------------------|
 | GET    | `/api/estado`                | Último JSON del ESP32 y estado de la conexión |
-| POST   | `/api/modo`                  | `{"minutos": 5 \| 15 \| 30 \| 45 \| 60}` cambia el modo |
+| POST   | `/api/modo`                  | `{"minutos": 1–180}` cambia el tiempo de secado (modos fijos: 5, 15, 30, 45, 60) |
 | GET    | `/api/historial?horas=1`     | Lecturas guardadas (1, 6 o 24 h)              |
 | GET    | `/api/eventos?limite=50`     | Últimos cambios de estado                     |
 | GET    | `/api/ciclos?limite=50`      | Últimos ciclos de secado                      |

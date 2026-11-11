@@ -19,6 +19,7 @@
 
 // Panel en vivo: consulta /api/estado cada 2 s y permite cambiar el modo.
 let ultimo = null;
+let campoPrellenado = false;
 
 function medidor(id, porcentaje, color) {
   const el = document.getElementById(id);
@@ -58,9 +59,16 @@ function pintarCiclo(d) {
   barra.style.width = `${avance}%`;
   barra.style.background = info.emergencia ? "var(--off)" : d.estado === "SECADO COMPLETO" ? "var(--ok)" : "var(--accent)";
 
+  const esFijo = window.LIMITES.modos.includes(d.modo);
   document.querySelectorAll("#modos .btn").forEach((b) => {
     b.setAttribute("aria-pressed", String(Number(b.dataset.modo) === d.modo));
   });
+  $("#btn-personalizado").setAttribute("aria-pressed", String(!esFijo && Boolean(d.modo)));
+  // Al abrir la página, si el horno ya tiene un tiempo personalizado, se muestra en el campo
+  if (!campoPrellenado) {
+    campoPrellenado = true;
+    if (!esFijo && d.modo) $("#minutos-personalizado").value = d.modo;
+  }
 
   const alerta = $("#alerta");
   if (info.emergencia || d.estado === "FALLA DHT22") {
@@ -118,17 +126,17 @@ async function refrescar() {
   pintar();
 }
 
-async function cambiarModo(boton) {
+async function cambiarModo(minutos) {
   const msg = $("#modo-msg");
-  const botones = document.querySelectorAll("#modos .btn");
+  const botones = document.querySelectorAll("#modos .btn, #btn-personalizado");
   botones.forEach((b) => { b.disabled = true; });
   try {
     await pedirJSON("/api/modo", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ minutos: Number(boton.dataset.modo) }),
+      body: JSON.stringify({ minutos }),
     });
-    msg.textContent = `${t("modo_enviado")}: ${boton.dataset.modo} ${t("min")}`;
+    msg.textContent = `${t("modo_enviado")}: ${minutos} ${t("min")}`;
   } catch (e) {
     msg.textContent = t("modo_error");
   } finally {
@@ -138,7 +146,24 @@ async function cambiarModo(boton) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll("#modos .btn").forEach((b) => b.addEventListener("click", () => cambiarModo(b)));
+  document.querySelectorAll("#modos .btn").forEach((b) => {
+    b.addEventListener("click", () => {
+      $("#minutos-personalizado").value = "";
+      cambiarModo(Number(b.dataset.modo));
+    });
+  });
+
+  // Tiempo personalizado: entero dentro del rango permitido
+  $("#modo-personalizado").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const { modo_min: min, modo_max: max } = window.LIMITES;
+    const minutos = Number($("#minutos-personalizado").value);
+    if (!Number.isInteger(minutos) || minutos < min || minutos > max) {
+      $("#modo-msg").textContent = `${t("rango_invalido")} ${min} – ${max} ${t("min")}`;
+      return;
+    }
+    cambiarModo(minutos);
+  });
   refrescar();
   setInterval(refrescar, 2000);
 });

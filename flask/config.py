@@ -48,6 +48,8 @@ DATOS_VENCIDOS_S = 10
 
 # Deben coincidir con config.h del ESP32
 MODOS_MINUTOS = (5, 15, 30, 45, 60)
+MODO_MIN_MINUTOS = 1      # tiempo personalizado mínimo
+MODO_MAX_MINUTOS = 180    # tiempo personalizado máximo
 TEMP_OBJETIVO = 30.0
 DS18B20_TEMP_EMERGENCIA = 70.0
 GAS_UMBRAL = 1500

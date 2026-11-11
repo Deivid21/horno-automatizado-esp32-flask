@@ -54,7 +54,7 @@ class Simulador(threading.Thread):
         return True
 
     def enviar(self, comando: str) -> bool:
-        if comando.isdigit() and int(comando) in config.MODOS_MINUTOS:
+        if comando.isdigit() and config.MODO_MIN_MINUTOS <= int(comando) <= config.MODO_MAX_MINUTOS:
             self.modo = int(comando)
             log.info("[demo] Modo de secado: %s min", self.modo)
         return True

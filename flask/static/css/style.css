@@ -188,6 +188,20 @@ html[lang="es"] .lang-toggle [data-lang-opt="es"] { background: var(--accent); c
 .modos .btn { min-width: 84px; }
 .modos .btn[aria-pressed="false"] { background: transparent; color: var(--text); border-color: var(--border); }
 .modos .btn[aria-pressed="false"]:hover { background: var(--bg-soft); }
+.personalizado { margin-top: 16px; }
+.personalizado-fila { display: flex; gap: 8px; margin-top: 6px; }
+.campo {
+  display: flex; align-items: center; gap: 6px; flex: 1; max-width: 200px;
+  padding: 0 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-soft);
+}
+.campo:focus-within { border-color: var(--accent); }
+.campo input {
+  width: 100%; min-width: 0; padding: 9px 0; border: 0; outline: 0; background: transparent;
+  color: var(--text); font: inherit; font-family: var(--mono);
+}
+.campo span { color: var(--muted); font-size: .9rem; }
+#btn-personalizado[aria-pressed="false"] { background: transparent; color: var(--text); border-color: var(--border); }
+#btn-personalizado[aria-pressed="false"]:hover { background: var(--bg-soft); }
 
 /* ── Sensores ───────────────────────────────────────── */
 .sensor-label { color: var(--muted); font-size: .85rem; font-weight: 500; margin: 0; }

@@ -53,6 +53,8 @@ def crear_app() -> Flask:
         "ds18b20_emergencia": config.DS18B20_TEMP_EMERGENCIA,
         "gas_umbral": config.GAS_UMBRAL,
         "modos": config.MODOS_MINUTOS,
+        "modo_min": config.MODO_MIN_MINUTOS,
+        "modo_max": config.MODO_MAX_MINUTOS,
     }
 
     # ---------- Páginas ----------
@@ -78,7 +80,8 @@ def crear_app() -> Flask:
     @app.post("/api/modo")
     def api_modo():
         minutos = (request.get_json(silent=True) or {}).get("minutos")
-        if minutos not in config.MODOS_MINUTOS:
+        es_entero = isinstance(minutos, int) and not isinstance(minutos, bool)
+        if not es_entero or not config.MODO_MIN_MINUTOS <= minutos <= config.MODO_MAX_MINUTOS:
             return jsonify(ok=False, error="modo_invalido"), 400
         if not fuente.enviar(str(minutos)):
             return jsonify(ok=False, error="sin_conexion"), 503
