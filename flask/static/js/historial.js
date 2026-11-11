@@ -73,4 +73,5 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(cargar, 15000);
 });
 document.addEventListener("idioma", pintarGraficos);
+document.addEventListener("tema", pintarGraficos);  // los colores salen de las variables CSS
 window.addEventListener("resize", pintarGraficos);

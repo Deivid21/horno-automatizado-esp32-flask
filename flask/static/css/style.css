@@ -36,8 +36,9 @@
   --mono: "JetBrains Mono", ui-monospace, monospace;
   color-scheme: dark;
 }
+/* Tema claro: sigue al sistema salvo que el interruptor elija uno (html[data-theme]) */
 @media (prefers-color-scheme: light) {
-  :root {
+  :root:not([data-theme="dark"]) {
     --bg: #f6f8fb;
     --bg-soft: #eef2f7;
     --card: #ffffff;
@@ -50,6 +51,19 @@
     --ds: #8250df;
     color-scheme: light;
   }
+}
+:root[data-theme="light"] {
+  --bg: #f6f8fb;
+  --bg-soft: #eef2f7;
+  --card: #ffffff;
+  --card-hover: #f3f6fb;
+  --border: #dde3ec;
+  --text: #1a2230;
+  --muted: #5d6b7e;
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, .1);
+  --ds: #8250df;
+  color-scheme: light;
 }
 
 /* ── Base ───────────────────────────────────────────── */
@@ -86,6 +100,15 @@ main { min-height: 70vh; padding-bottom: 64px; }
 .nav-links { display: flex; align-items: center; gap: 4px; }
 .nav-links a { color: var(--muted); padding: 6px 12px; border-radius: 8px; font-weight: 500; font-size: .95rem; }
 .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--bg-soft); text-decoration: none; }
+.theme-toggle {
+  display: inline-grid; place-items: center; width: 30px; height: 30px; margin-left: 6px; padding: 0; cursor: pointer;
+  background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; color: var(--muted);
+}
+.theme-toggle:hover { color: var(--text); }
+.theme-toggle svg { width: 16px; height: 16px; display: none; }
+html:not([data-theme]) .theme-toggle .ic-auto,
+html[data-theme="light"] .theme-toggle .ic-light,
+html[data-theme="dark"] .theme-toggle .ic-dark { display: block; }
 .lang-toggle {
   display: inline-flex; margin-left: 6px; padding: 2px; cursor: pointer;
   background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px;
@@ -204,5 +227,14 @@ tbody tr:hover { background: var(--card-hover); }
   .ciclo { grid-template-columns: 1fr; }
   .brand span { display: none; }
   .nav-links a { padding: 6px 8px; font-size: .9rem; }
+  .lang-toggle, .theme-toggle { margin-left: 2px; }
   .hero { padding: 32px 0 24px; }
+}
+@media (max-width: 420px) {
+  .site-header .container { width: calc(100% - 24px); }
+  .nav { gap: 8px; }
+  .nav-links { gap: 2px; }
+  .nav-links a { padding: 6px 4px; font-size: .82rem; }
+  .theme-toggle { width: 26px; height: 26px; }
+  .lang-toggle span { padding: 3px 6px; }
 }
