@@ -71,7 +71,7 @@ function dibujarGrafico(svg, op) {
     const y = py(v);
     nodoSVG("line", { x1: m.izquierda, x2: ancho - m.derecha, y1: y, y2: y, class: "eje", opacity: i === 0 ? 1 : 0.5 }, svg);
     const t = nodoSVG("text", { x: m.izquierda - 8, y: y + 4, "text-anchor": "end" }, svg);
-    t.textContent = `${Math.round(v)}${op.unidad || ""}`;
+    t.textContent = `${maxY - minY < 10 ? v.toFixed(1) : Math.round(v)}${op.unidad || ""}`;
   }
 
   // Eje X: 5 marcas de hora
