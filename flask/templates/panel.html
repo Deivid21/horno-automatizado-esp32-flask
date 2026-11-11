@@ -54,6 +54,18 @@
         <button class="btn" type="button" data-modo="{{ m }}" aria-pressed="false">{{ m }} <span data-i18n="min">min</span></button>
         {% endfor %}
       </div>
+      <form id="modo-personalizado" class="personalizado" novalidate>
+        <label for="minutos-personalizado" class="sensor-label" data-i18n="personalizado">Tiempo personalizado</label>
+        <div class="personalizado-fila">
+          <div class="campo">
+            <input id="minutos-personalizado" type="number" inputmode="numeric"
+                   min="{{ limites.modo_min }}" max="{{ limites.modo_max }}" step="1"
+                   placeholder="{{ limites.modo_min }}–{{ limites.modo_max }}">
+            <span data-i18n="min">min</span>
+          </div>
+          <button class="btn" type="submit" id="btn-personalizado" aria-pressed="false" data-i18n="aplicar">Aplicar</button>
+        </div>
+      </form>
       <p id="modo-msg" class="small muted" style="min-height:1.6em;margin:10px 0 0"></p>
     </div>
   </section>
