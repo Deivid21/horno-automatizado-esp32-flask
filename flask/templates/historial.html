@@ -1,0 +1,74 @@
+{#
+  For more Support see: https://t.me/Deivid21Hub
+
+  Copyright (C) 1996 - 2026 INACAP
+  Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+#}
+{% extends "base.html" %}
+
+{% block contenido %}
+<section class="hero">
+  <div class="container hero-row">
+    <div>
+      <p class="eyebrow" data-i18n="eyebrow">INACAP · Secado de endoscopios</p>
+      <h1 data-i18n="historial_titulo">Historial</h1>
+      <p class="lead" data-i18n="historial_lead">Evolución de los sensores registrada en la Raspberry Pi.</p>
+    </div>
+    <div class="btn-group modos" id="rangos">
+      <button class="btn" type="button" data-horas="1" aria-pressed="true" data-i18n="hora_1">1 h</button>
+      <button class="btn" type="button" data-horas="6" aria-pressed="false" data-i18n="hora_6">6 h</button>
+      <button class="btn" type="button" data-horas="24" aria-pressed="false" data-i18n="hora_24">24 h</button>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section class="card section">
+    <div class="card-head">
+      <h2 data-i18n="graf_temp">Temperatura</h2>
+      <div class="leyenda">
+        <span><i style="background:var(--accent)"></i>DHT22</span>
+        <span><i style="background:var(--ds)"></i>DS18B20</span>
+        <span><i style="background:var(--warn)"></i><span data-i18n="objetivo">Objetivo</span></span>
+      </div>
+    </div>
+    <svg id="g-temp" class="grafico" role="img" aria-label="Temperatura"></svg>
+  </section>
+
+  <section class="card section">
+    <div class="card-head">
+      <h2 data-i18n="graf_hum">Humedad</h2>
+      <div class="leyenda"><span><i style="background:var(--ok)"></i>DHT22</span></div>
+    </div>
+    <svg id="g-hum" class="grafico" role="img" aria-label="Humedad"></svg>
+  </section>
+
+  <section class="card section">
+    <div class="card-head">
+      <h2 data-i18n="graf_gas">Gas</h2>
+      <div class="leyenda">
+        <span><i style="background:var(--accent)"></i>MQ-2</span>
+        <span><i style="background:var(--off)"></i><span data-i18n="umbral">Umbral</span></span>
+      </div>
+    </div>
+    <svg id="g-gas" class="grafico" role="img" aria-label="Gas"></svg>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/grafico.js') }}"></script>
+<script src="{{ url_for('static', filename='js/historial.js') }}"></script>
+{% endblock %}
