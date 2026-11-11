@@ -11,6 +11,7 @@ venv/
 .venv/
 .env
 *.db
+flask/datos/
 
 # Editores y sistema
 .vscode/
