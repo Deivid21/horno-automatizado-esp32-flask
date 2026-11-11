@@ -13,7 +13,7 @@ que muestra los datos y el estado del horno.
 .
 ├── esp32/
 │   └── horno_secado/      Firmware del ESP32 (Arduino IDE)
-└── flask/                 Servidor local en la Raspberry Pi (próximamente)
+└── flask/                 Servidor local en la Raspberry Pi
 ```
 
 ## Hardware
@@ -30,8 +30,10 @@ que muestra los datos y el estado del horno.
 | Ventilador   | Ventilador 12 V con MOSFET                     |
 | Raspberry Pi | Servidor Flask local                           |
 
-La documentación del firmware, conexiones y reglas está en
-[`esp32/README.md`](esp32/README.md).
+## Documentación
+
+- [`esp32/README.md`](esp32/README.md): firmware, conexiones, estados y reglas.
+- [`flask/README.md`](flask/README.md): instalación en la Raspberry Pi, interfaz y API.
 
 ## Licencia
 
