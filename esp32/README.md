@@ -104,6 +104,18 @@ Vent:ON   Calef:N/C
 
 Los cambios de estado se registran con `[EVENTO]`.
 
+Después de cada reporte se envía una línea JSON para el servidor Flask de la
+Raspberry Pi. Las líneas que no empiezan con `{` son solo para lectura humana:
+
+```json
+{"temp":30.1,"hum":45.2,"temp_ds":30.6,"dist":6.3,"objeto":true,"gas":850,
+ "gas_calentando":false,"estado":"SECANDO","modo":30,"restante":754,
+ "ventilador":true,"calefactor":false,"calefactor_instalado":false,"uptime":1234}
+```
+
+Los valores sin lectura llegan como `null`; `restante` vale `-1` cuando no hay
+ciclo en curso.
+
 | Comando        | Acción                               |
 |----------------|--------------------------------------|
 | `15`, `30`, `60` | Cambia el modo de secado (minutos) |
