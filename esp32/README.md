@@ -42,8 +42,8 @@ compila automáticamente los módulos de `src/`.
 | MQ-2 A0           | GPIO 26   | **Divisor de voltaje** 5 V → 3.3 V           |
 | HC-SR04 TRIG      | GPIO 14   |                                              |
 | HC-SR04 ECHO      | GPIO 34   | **Divisor de voltaje** 5 V → 3.3 V           |
-| LCD SDA           | GPIO 22   | Dirección I2C 0x27 (o 0x3F)                  |
-| LCD SCL           | GPIO 23   |                                              |
+| LCD SDA           | GPIO 21   | Dirección I2C 0x27 (o 0x3F)                  |
+| LCD SCL           | GPIO 22   |                                              |
 | Buzzer            | GPIO 32   | Buzzer activo                                |
 | Ventilador 12 V   | GPIO 25   | MOSFET de nivel lógico, diodo en paralelo    |
 | Calefactor        | GPIO 33   | Reservado: optoacoplador + transistor        |
