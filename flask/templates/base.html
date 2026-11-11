@@ -1,0 +1,66 @@
+{#
+  For more Support see: https://t.me/Deivid21Hub
+
+  Copyright (C) 1996 - 2026 INACAP
+  Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+#}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Horno de Secado · INACAP</title>
+  <meta name="theme-color" content="#0d1117">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="{{ url_for('panel') }}">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 9h10M7 13c1.5-1 2.5 1 4 0s2.5 1 4 0"/><circle cx="8" cy="17" r=".5" fill="currentColor"/></svg>
+        <span data-i18n="marca">Horno de Secado</span>
+      </a>
+      <nav class="nav-links">
+        <a href="{{ url_for('panel') }}" {% if pagina == 'panel' %}class="active"{% endif %} data-i18n="nav_panel">Panel</a>
+        <a href="{{ url_for('historial') }}" {% if pagina == 'historial' %}class="active"{% endif %} data-i18n="nav_historial">Historial</a>
+        <a href="{{ url_for('registro') }}" {% if pagina == 'registro' %}class="active"{% endif %} data-i18n="nav_registro">Registro</a>
+        <button id="lang-toggle" class="lang-toggle" type="button" aria-label="Change language / Cambiar idioma">
+          <span data-lang-opt="en">EN</span><span data-lang-opt="es">ES</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {% block contenido %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© 2017 – 2026 Deivid Ignacio Parra (Deivid21) · INACAP</span>
+      <span><span data-i18n="pie_ramo">Taller de Diseño de Proyectos Electrónicos</span> · <a href="https://t.me/Deivid21Hub" target="_blank" rel="noopener">Telegram</a></span>
+    </div>
+  </footer>
+
+  <script>window.LIMITES = {{ limites | tojson }};</script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
