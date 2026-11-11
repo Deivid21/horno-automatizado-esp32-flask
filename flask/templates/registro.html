@@ -1,0 +1,72 @@
+{#
+  For more Support see: https://t.me/Deivid21Hub
+
+  Copyright (C) 1996 - 2026 INACAP
+  Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+#}
+{% extends "base.html" %}
+
+{% block contenido %}
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow" data-i18n="eyebrow">INACAP · Secado de endoscopios</p>
+    <h1 data-i18n="registro_titulo">Registro</h1>
+    <p class="lead" data-i18n="registro_lead">Ciclos de secado y cambios de estado del horno.</p>
+  </div>
+</section>
+
+<div class="container">
+  <section class="card section">
+    <div class="card-head"><h2 data-i18n="ciclos">Ciclos de secado</h2></div>
+    <div class="tabla-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="col_inicio">Inicio</th>
+            <th data-i18n="col_duracion">Duración</th>
+            <th data-i18n="col_modo">Modo</th>
+            <th data-i18n="col_resultado">Resultado</th>
+            <th data-i18n="col_temp_prom">Temp. promedio</th>
+            <th data-i18n="col_hum_final">Hum. final</th>
+          </tr>
+        </thead>
+        <tbody id="t-ciclos"></tbody>
+      </table>
+      <p id="v-ciclos" class="vacio" data-i18n="sin_ciclos" hidden>Aún no hay ciclos registrados.</p>
+    </div>
+  </section>
+
+  <section class="card section">
+    <div class="card-head"><h2 data-i18n="eventos">Eventos</h2></div>
+    <div class="tabla-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="col_fecha">Fecha</th>
+            <th data-i18n="col_cambio">Cambio</th>
+            <th data-i18n="col_tipo">Tipo</th>
+          </tr>
+        </thead>
+        <tbody id="t-eventos"></tbody>
+      </table>
+      <p id="v-eventos" class="vacio" data-i18n="sin_eventos" hidden>Aún no hay eventos registrados.</p>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/registro.js') }}"></script>
+{% endblock %}
