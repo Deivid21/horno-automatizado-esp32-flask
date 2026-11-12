@@ -23,6 +23,11 @@
  * Tras el precalentamiento, si la lectura supera GAS_UMBRAL declara
  * emergencia y el sistema se apaga; se rearma solo cuando baja de
  * (GAS_UMBRAL - GAS_HISTERESIS).
+ *
+ * Falla: un MQ-2 alimentado nunca marca 0. Si la lectura queda bajo
+ * GAS_MIN_VALIDO durante GAS_LECTURAS_FALLA lecturas seguidas, el sensor
+ * está desconectado o sin alimentación. La resistencia del divisor de
+ * voltaje que va del GPIO a GND lleva el pin a 0 si se corta el cable.
  */
 #pragma once
 
@@ -39,11 +44,13 @@ public:
   int  valor() const { return _valor; }
   bool calentando() const;
   bool enEmergencia() const { return _emergencia; }
+  bool enFalla() const;
 
 private:
   uint8_t       _pin;
   int           _valor      = 0;
   bool          _emergencia = false;
+  uint8_t       _sinSenal   = 0;
   unsigned long _inicio     = 0;
   unsigned long _ultimaLectura = 0;
 };
