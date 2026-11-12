@@ -30,6 +30,7 @@
  *   FALLA SEGURIDAD   DS18B20 sin lecturas           -> sistema apagado
  *   FALLA GAS         MQ-2 sin señal                 -> sistema apagado
  *   FALLA DHT22       DHT22 sin lecturas             -> calefactor apagado
+ *   FALLA HC-SR04     HC-SR04 sin eco                -> calefactor apagado, ciclo en pausa
  *   STAND-BY          HC-SR04 no detecta objeto      -> espera
  *   SECADO COMPLETO   terminó el tiempo del modo     -> espera retirar el objeto
  *   SECANDO           objeto dentro, ciclo en curso  -> control a 30 °C
@@ -70,6 +71,7 @@ enum class Estado : uint8_t {
   SECANDO,
   SECADO_COMPLETO,
   FALLA_DHT22,
+  FALLA_HC_SR04,
   FALLA_SEGURIDAD,
   FALLA_GAS,
   SOBRETEMPERATURA,
@@ -89,6 +91,7 @@ const char* nombreEstado(Estado e) {
     case Estado::SECANDO:          return "SECANDO";
     case Estado::SECADO_COMPLETO:  return "SECADO COMPLETO";
     case Estado::FALLA_DHT22:      return "FALLA DHT22";
+    case Estado::FALLA_HC_SR04:    return "FALLA HC-SR04";
     case Estado::FALLA_SEGURIDAD:  return "FALLA SEGURIDAD";
     case Estado::FALLA_GAS:        return "FALLA GAS";
     case Estado::SOBRETEMPERATURA: return "SOBRETEMPERATURA";
@@ -120,6 +123,7 @@ Estado evaluarEstado() {
   if (ds18b20.enFalla())               return Estado::FALLA_SEGURIDAD;
   if (gas.enFalla())                   return Estado::FALLA_GAS;
   if (dht22.enFalla())                 return Estado::FALLA_DHT22;
+  if (presencia.enFalla())             return Estado::FALLA_HC_SR04;
   if (!presencia.hayObjeto())          return Estado::STAND_BY;
   if (transcurridoMs >= duracionCicloMs()) return Estado::SECADO_COMPLETO;
   return Estado::SECANDO;
@@ -157,6 +161,12 @@ void aplicarSalidas() {
       buzzer.patron(PatronBuzzer::LENTO);
       break;
 
+    case Estado::FALLA_HC_SR04:  // sin saber si hay objeto no se calienta
+      actuadores.calefactor(false);
+      actuadores.ventilador(true);
+      buzzer.patron(PatronBuzzer::LARGO);
+      break;
+
     case Estado::STAND_BY:
       actuadores.calefactor(false);
       actuadores.ventilador(true);
@@ -181,6 +191,9 @@ void aplicarSalidas() {
 // Tiempo de secado
 // ============================================================
 void actualizarTiempo(unsigned long delta) {
+  if (presencia.enFalla()) {
+    return;  // sensor sin eco: el ciclo queda en pausa, no se reinicia
+  }
   if (!presencia.hayObjeto()) {
     transcurridoMs = 0;  // sin objeto, el próximo ciclo parte de cero
   } else if (estado == Estado::SECANDO) {

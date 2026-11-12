@@ -22,6 +22,11 @@
  *
  * Detecta si hay un objeto (endoscopio) a menos de PRESENCIA_DISTANCIA_CM.
  * Si no hay nada, el horno pasa a stand-by.
+ *
+ * Falla: con la cámara cerrada siempre debería haber eco, del objeto o de la
+ * pared del fondo. Si no llega eco durante PRESENCIA_LECTURAS_FALLA lecturas
+ * seguidas, el sensor está desconectado o dañado. Mientras falla se conserva
+ * el último estado conocido para no dar por retirado el endoscopio.
  */
 #pragma once
 
@@ -37,6 +42,7 @@ public:
 
   float distancia() const { return _distanciaCm; }  // -1 = fuera de rango
   bool  hayObjeto() const { return _hayObjeto; }
+  bool  enFalla() const;
 
 private:
   float medir();
@@ -46,5 +52,6 @@ private:
   float         _distanciaCm = -1;
   bool          _hayObjeto   = false;
   uint8_t       _contador    = 0;
+  uint8_t       _sinEco      = 0;
   unsigned long _ultimaLectura = 0;
 };

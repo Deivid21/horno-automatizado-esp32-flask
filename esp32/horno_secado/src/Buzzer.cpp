@@ -42,6 +42,7 @@ void Buzzer::actualizar(unsigned long ahora) {
     case PatronBuzzer::PITIDO_CORTO: on = t < 150;                                 break;
     case PatronBuzzer::TRES_PITIDOS: on = (t < 1500) && ((t % 500) < 250);         break;
     case PatronBuzzer::LENTO:        on = (t % 2000) < 150;                        break;
+    case PatronBuzzer::LARGO:        on = (t % 3000) < 600;                        break;
     case PatronBuzzer::DOBLE:        on = ((t % 1000) < 100) ||
                                           ((t % 1000) >= 200 && (t % 1000) < 300); break;
     case PatronBuzzer::TRIPLE:       on = ((t % 1500) < 500) && ((t % 1500) % 200 < 100);  break;

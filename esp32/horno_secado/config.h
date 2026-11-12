@@ -83,6 +83,11 @@ constexpr uint8_t       GAS_LECTURAS_FALLA      = 10;      // lecturas seguidas 
 // ============================================================
 constexpr float   PRESENCIA_DISTANCIA_CM = 10.0f;  // menos que esto = hay un objeto en la cámara
 constexpr uint8_t PRESENCIA_LECTURAS     = 3;      // lecturas iguales seguidas para confirmar el cambio
+// Con la cámara cerrada siempre hay eco (del objeto o de la pared del fondo).
+// Sin eco durante PRESENCIA_LECTURAS_FALLA lecturas (~3 s) = sensor en falla.
+// Si la cámara vacía no devuelve eco (pared inclinada o que absorbe el sonido), pon false.
+constexpr bool    PRESENCIA_DETECTAR_FALLA = true;
+constexpr uint8_t PRESENCIA_LECTURAS_FALLA = 10;
 
 // ============================================================
 // Fallas y pantalla
