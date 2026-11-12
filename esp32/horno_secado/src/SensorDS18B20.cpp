@@ -42,6 +42,8 @@ void SensorDS18B20::actualizar(unsigned long ahora) {
   // -127 = desconectado; 85 = valor de encendido, aún sin medición real
   if (t == DEVICE_DISCONNECTED_C || t == 85.0f) {
     if (_fallas < 255) _fallas++;
+    // En falla se borra el valor; _emergencia se conserva para no rearmar a ciegas
+    if (enFalla()) _temperatura = NAN;
     return;
   }
 
@@ -59,11 +61,14 @@ bool SensorDS18B20::enFalla() const {
 }
 
 void SensorDS18B20::imprimir() const {
-  if (isnan(_temperatura)) {
-    Serial.println("[DS18B20] Sin datos (revisa la conexión y la pull-up de 4.7k)");
+  if (enFalla()) {
+    Serial.println("[DS18B20] Temp: --- | FALLA: sin lecturas (revisa la conexión y la pull-up de 4.7k)");
     return;
   }
-  const char* estado = enFalla() ? "FALLA" : (_emergencia ? "EMERGENCIA" : "OK");
+  if (isnan(_temperatura)) {
+    Serial.println("[DS18B20] Esperando la primera lectura...");
+    return;
+  }
   Serial.printf("[DS18B20] Temp: %.1f C | Limite: %.1f C | %s\n",
-                _temperatura, DS18B20_TEMP_EMERGENCIA, estado);
+                _temperatura, DS18B20_TEMP_EMERGENCIA, _emergencia ? "EMERGENCIA" : "OK");
 }

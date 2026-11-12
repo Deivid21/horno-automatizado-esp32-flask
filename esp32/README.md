@@ -64,11 +64,18 @@ La primera condición verdadera decide el estado:
 | 1         | ALERTA GAS        | MQ-2 > 1500 (tras 60 s)            | Sistema apagado                  | Continuo             |
 | 2         | SOBRETEMPERATURA  | DS18B20 ≥ 70 °C                    | Sistema apagado                  | Intermitente rápido  |
 | 3         | FALLA SEGURIDAD   | DS18B20 sin lecturas válidas       | Sistema apagado                  | Doble pitido         |
-| 4         | FALLA DHT22       | DHT22 sin lecturas válidas         | Calefactor apagado               | Pitido cada 2 s      |
-| 5         | STAND-BY          | HC-SR04 no detecta objeto (10 cm)  | Ventilador encendido             | —                    |
-| 6         | SECADO COMPLETO   | Terminó el tiempo del modo         | Calefactor apagado               | 3 pitidos            |
-| 7         | SECANDO           | Objeto dentro, ciclo en curso      | Control a 30 °C, ventilador ON   | 1 pitido al iniciar  |
+| 4         | FALLA GAS         | MQ-2 < 15 durante 5 s (sin señal)  | Sistema apagado                  | Triple pitido        |
+| 5         | FALLA DHT22       | DHT22 sin lecturas válidas         | Calefactor apagado               | Pitido cada 2 s      |
+| 6         | STAND-BY          | HC-SR04 no detecta objeto (10 cm)  | Ventilador encendido             | —                    |
+| 7         | SECADO COMPLETO   | Terminó el tiempo del modo         | Calefactor apagado               | 3 pitidos            |
+| 8         | SECANDO           | Objeto dentro, ciclo en curso      | Control a 30 °C, ventilador ON   | 1 pitido al iniciar  |
 
+- **Fallas de sensores:** el DHT22 y el DS18B20 fallan tras 5 lecturas
+  inválidas seguidas; el MQ-2, si su lectura queda bajo `GAS_MIN_VALIDO` (15)
+  durante 5 s. Un MQ-2 alimentado marca ~48 con aire limpio, así que una
+  lectura cercana a 0 significa cable cortado o módulo sin alimentación. En
+  falla, la pantalla, el monitor serial y Flask muestran `---` en vez del
+  último valor.
 - **Rearme automático:** las emergencias se liberan solas cuando los valores
   vuelven a la normalidad (DS18B20 < 65 °C, gas < 1400).
 - **Pausa:** durante una falla o emergencia el tiempo de secado queda en pausa
