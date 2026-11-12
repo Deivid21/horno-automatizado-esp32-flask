@@ -28,6 +28,7 @@
  *   ALERTA GAS        MQ-2 sobre el umbral           -> sistema apagado
  *   SOBRETEMPERATURA  DS18B20 sobre 70 °C            -> sistema apagado
  *   FALLA SEGURIDAD   DS18B20 sin lecturas           -> sistema apagado
+ *   FALLA GAS         MQ-2 sin señal                 -> sistema apagado
  *   FALLA DHT22       DHT22 sin lecturas             -> calefactor apagado
  *   STAND-BY          HC-SR04 no detecta objeto      -> espera
  *   SECADO COMPLETO   terminó el tiempo del modo     -> espera retirar el objeto
@@ -70,6 +71,7 @@ enum class Estado : uint8_t {
   SECADO_COMPLETO,
   FALLA_DHT22,
   FALLA_SEGURIDAD,
+  FALLA_GAS,
   SOBRETEMPERATURA,
   ALERTA_GAS
 };
@@ -88,6 +90,7 @@ const char* nombreEstado(Estado e) {
     case Estado::SECADO_COMPLETO:  return "SECADO COMPLETO";
     case Estado::FALLA_DHT22:      return "FALLA DHT22";
     case Estado::FALLA_SEGURIDAD:  return "FALLA SEGURIDAD";
+    case Estado::FALLA_GAS:        return "FALLA GAS";
     case Estado::SOBRETEMPERATURA: return "SOBRETEMPERATURA";
     case Estado::ALERTA_GAS:       return "ALERTA GAS";
   }
@@ -96,7 +99,7 @@ const char* nombreEstado(Estado e) {
 
 bool esEmergencia(Estado e) {
   return e == Estado::ALERTA_GAS || e == Estado::SOBRETEMPERATURA ||
-         e == Estado::FALLA_SEGURIDAD;
+         e == Estado::FALLA_SEGURIDAD || e == Estado::FALLA_GAS;
 }
 
 unsigned long duracionCicloMs() {
@@ -115,6 +118,7 @@ Estado evaluarEstado() {
   if (gas.enEmergencia())              return Estado::ALERTA_GAS;
   if (ds18b20.enEmergencia())          return Estado::SOBRETEMPERATURA;
   if (ds18b20.enFalla())               return Estado::FALLA_SEGURIDAD;
+  if (gas.enFalla())                   return Estado::FALLA_GAS;
   if (dht22.enFalla())                 return Estado::FALLA_DHT22;
   if (!presencia.hayObjeto())          return Estado::STAND_BY;
   if (transcurridoMs >= duracionCicloMs()) return Estado::SECADO_COMPLETO;
@@ -139,6 +143,12 @@ void aplicarSalidas() {
       actuadores.calefactor(false);
       actuadores.ventilador(VENTILADOR_EN_EMERGENCIA);
       buzzer.patron(PatronBuzzer::DOBLE);
+      break;
+
+    case Estado::FALLA_GAS:  // sin vigilancia de gas no es seguro operar
+      actuadores.calefactor(false);
+      actuadores.ventilador(VENTILADOR_EN_EMERGENCIA);
+      buzzer.patron(PatronBuzzer::TRIPLE);
       break;
 
     case Estado::FALLA_DHT22:  // sin dato de control no se calienta

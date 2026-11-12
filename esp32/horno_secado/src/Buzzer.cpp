@@ -44,6 +44,7 @@ void Buzzer::actualizar(unsigned long ahora) {
     case PatronBuzzer::LENTO:        on = (t % 2000) < 150;                        break;
     case PatronBuzzer::DOBLE:        on = ((t % 1000) < 100) ||
                                           ((t % 1000) >= 200 && (t % 1000) < 300); break;
+    case PatronBuzzer::TRIPLE:       on = ((t % 1500) < 500) && ((t % 1500) % 200 < 100);  break;
     case PatronBuzzer::RAPIDO:       on = (t % 400) < 200;                         break;
     case PatronBuzzer::CONTINUO:     on = true;                                    break;
   }

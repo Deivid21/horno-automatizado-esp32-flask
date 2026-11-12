@@ -33,6 +33,7 @@ enum class PatronBuzzer : uint8_t {
   TRES_PITIDOS,   // una vez: secado completo
   LENTO,          // pitido cada 2 s: falla del DHT22
   DOBLE,          // doble pitido cada 1 s: falla del sensor de seguridad
+  TRIPLE,         // triple pitido cada 1.5 s: falla del sensor de gas
   RAPIDO,         // intermitente rápido: sobretemperatura
   CONTINUO        // sin pausa: gas detectado
 };

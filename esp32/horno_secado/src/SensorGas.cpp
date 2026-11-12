@@ -48,17 +48,33 @@ void SensorGas::actualizar(unsigned long ahora) {
 
   if (calentando()) {
     _emergencia = false;
+    _sinSenal   = 0;
     return;
+  }
+
+  // Falla: lectura pegada en 0 = cable cortado o módulo sin alimentación
+  if (_valor < GAS_MIN_VALIDO) {
+    if (_sinSenal < 255) _sinSenal++;
+  } else {
+    _sinSenal = 0;
   }
 
   if (_valor > GAS_UMBRAL)                        _emergencia = true;
   else if (_valor < GAS_UMBRAL - GAS_HISTERESIS)  _emergencia = false;
 }
 
+bool SensorGas::enFalla() const {
+  return _sinSenal >= GAS_LECTURAS_FALLA;
+}
+
 void SensorGas::imprimir() const {
   if (calentando()) {
     unsigned long restante = (GAS_PRECALENTAMIENTO_MS - (millis() - _inicio)) / 1000;
     Serial.printf("[MQ-2]    ADC: %d | Precalentando (%lu s)\n", _valor, restante);
+    return;
+  }
+  if (enFalla()) {
+    Serial.printf("[MQ-2]    ADC: %d | FALLA: sin señal (revisa la conexión de A0 y la alimentación)\n", _valor);
     return;
   }
   Serial.printf("[MQ-2]    ADC: %d | Umbral: %d | %s\n",
