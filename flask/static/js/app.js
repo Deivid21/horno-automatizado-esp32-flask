@@ -25,6 +25,7 @@ const ESTADOS = {
   "SECADO COMPLETO":  { color: "ok", desc: "desc_completo" },
   "FALLA DHT22":      { color: "warn", desc: "desc_pausa" },
   "FALLA SEGURIDAD":  { color: "off", desc: "desc_pausa", emergencia: true },
+  "FALLA GAS":        { color: "off", desc: "desc_pausa", emergencia: true },
   "SOBRETEMPERATURA": { color: "off", desc: "desc_pausa", emergencia: true },
   "ALERTA GAS":       { color: "off", desc: "desc_pausa", emergencia: true },
 };

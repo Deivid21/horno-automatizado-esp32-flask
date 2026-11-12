@@ -23,7 +23,8 @@ let campoPrellenado = false;
 
 function medidor(id, porcentaje, color) {
   const el = document.getElementById(id);
-  el.style.width = `${Math.max(0, Math.min(100, porcentaje))}%`;
+  const valido = Number.isFinite(porcentaje);  // sin lectura (null) = medidor vacío
+  el.style.width = `${valido ? Math.max(0, Math.min(100, porcentaje)) : 0}%`;
   el.style.background = `var(--${color})`;
 }
 
@@ -98,7 +99,9 @@ function pintarSensores(d) {
   $("#v-gas").textContent = d.gas ?? "--";
   const pGas = (d.gas / L.gas_umbral) * 100;
   medidor("m-gas", pGas, pGas >= 100 ? "off" : pGas >= 80 ? "warn" : "ok");
-  $("#e-gas").textContent = d.gas_calentando ? t("calentando") : d.estado === "ALERTA GAS" ? t("ALERTA GAS") : t("ok");
+  $("#e-gas").textContent = d.gas_calentando ? t("calentando")
+    : d.estado === "FALLA GAS" ? t("sin_senal")
+    : d.estado === "ALERTA GAS" ? t("ALERTA GAS") : t("ok");
 
   $("#v-objeto").textContent = t(d.objeto ? "objeto_dentro" : "camara_vacia");
   $("#v-dist").textContent = d.dist === null || d.dist === undefined ? t("fuera_rango") : `${fmtNum(d.dist)} cm`;
