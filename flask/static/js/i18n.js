@@ -45,6 +45,7 @@ const TEXTOS = {
     // Estados
     "STAND-BY": "Stand-by", "SECANDO": "Secando", "SECADO COMPLETO": "Secado completo",
     "FALLA DHT22": "Falla DHT22", "FALLA SEGURIDAD": "Falla sensor de seguridad",
+    "FALLA GAS": "Falla sensor de gas", sin_senal: "Sin señal",
     "SOBRETEMPERATURA": "Sobretemperatura", "ALERTA GAS": "Alerta de gas",
     desc_standby: "No hay objeto en la cámara.",
     desc_secando: "Secando a temperatura controlada.",
@@ -91,6 +92,7 @@ const TEXTOS = {
     encendido: "On", apagado: "Off", uptime: "ESP32 uptime",
     "STAND-BY": "Stand-by", "SECANDO": "Drying", "SECADO COMPLETO": "Drying complete",
     "FALLA DHT22": "DHT22 fault", "FALLA SEGURIDAD": "Safety sensor fault",
+    "FALLA GAS": "Gas sensor fault", sin_senal: "No signal",
     "SOBRETEMPERATURA": "Overtemperature", "ALERTA GAS": "Gas alert",
     desc_standby: "No object in the chamber.",
     desc_secando: "Drying at a controlled temperature.",

@@ -27,7 +27,7 @@ from .database import BaseDatos
 
 log = logging.getLogger(__name__)
 
-EMERGENCIAS = {"ALERTA GAS", "SOBRETEMPERATURA", "FALLA SEGURIDAD"}
+EMERGENCIAS = {"ALERTA GAS", "SOBRETEMPERATURA", "FALLA SEGURIDAD", "FALLA GAS"}
 FALLAS = {"FALLA DHT22"}
 
 
