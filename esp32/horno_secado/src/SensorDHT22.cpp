@@ -36,7 +36,9 @@ void SensorDHT22::actualizar(unsigned long ahora) {
 
   if (isnan(t) || isnan(h)) {
     if (_fallas < 255) _fallas++;
-    return;  // conserva el último valor válido
+    // Fallas sueltas conservan el último valor; en falla se borra para no mostrar datos viejos
+    if (enFalla()) _temperatura = _humedad = NAN;
+    return;
   }
 
   _temperatura = t;
@@ -49,11 +51,14 @@ bool SensorDHT22::enFalla() const {
 }
 
 void SensorDHT22::imprimir() const {
-  if (!tieneDatos()) {
-    Serial.println("[DHT22]   Sin datos (revisa la conexión)");
+  if (enFalla()) {
+    Serial.println("[DHT22]   Temp: --- | Hum: --- | FALLA: sin lecturas (revisa la conexión)");
     return;
   }
-  Serial.printf("[DHT22]   Temp: %.1f C | Hum: %.1f %% | Objetivo: %.1f C%s\n",
-                _temperatura, _humedad, TEMP_OBJETIVO,
-                enFalla() ? " | FALLA" : "");
+  if (!tieneDatos()) {
+    Serial.println("[DHT22]   Esperando la primera lectura...");
+    return;
+  }
+  Serial.printf("[DHT22]   Temp: %.1f C | Hum: %.1f %% | Objetivo: %.1f C\n",
+                _temperatura, _humedad, TEMP_OBJETIVO);
 }
