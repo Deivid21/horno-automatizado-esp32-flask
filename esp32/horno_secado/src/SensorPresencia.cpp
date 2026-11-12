@@ -49,6 +49,15 @@ void SensorPresencia::actualizar(unsigned long ahora) {
   _ultimaLectura = ahora;
 
   _distanciaCm = medir();
+
+  if (_distanciaCm < 0) {
+    if (_sinEco < 255) _sinEco++;
+    // Sin eco: si se vigila la falla, se conserva el último estado conocido
+    if (PRESENCIA_DETECTAR_FALLA) return;
+  } else {
+    _sinEco = 0;
+  }
+
   bool lectura = (_distanciaCm > 0) && (_distanciaCm < PRESENCIA_DISTANCIA_CM);
 
   // Filtro: el estado cambia solo con varias lecturas iguales seguidas
@@ -62,7 +71,15 @@ void SensorPresencia::actualizar(unsigned long ahora) {
   }
 }
 
+bool SensorPresencia::enFalla() const {
+  return PRESENCIA_DETECTAR_FALLA && _sinEco >= PRESENCIA_LECTURAS_FALLA;
+}
+
 void SensorPresencia::imprimir() const {
+  if (enFalla()) {
+    Serial.println("[HC-SR04] Dist: --- | FALLA: sin eco (revisa TRIG, ECHO y la alimentación)");
+    return;
+  }
   if (_distanciaCm < 0) {
     Serial.printf("[HC-SR04] Dist: fuera de rango | %s\n",
                   _hayObjeto ? "Objeto dentro" : "Camara vacia");
