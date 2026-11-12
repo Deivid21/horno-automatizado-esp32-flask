@@ -72,10 +72,10 @@ function pintarCiclo(d) {
   }
 
   const alerta = $("#alerta");
-  if (info.emergencia || d.estado === "FALLA DHT22") {
+  if (info.emergencia || info.aviso) {
     alerta.hidden = false;
     alerta.classList.toggle("alerta-warn", !info.emergencia);
-    $("#alerta-texto").textContent = `${t(d.estado)}: ${t(info.emergencia ? "alerta_emergencia" : "alerta_falla")}`;
+    $("#alerta-texto").textContent = `${t(d.estado)}: ${t(info.emergencia ? "alerta_emergencia" : info.aviso)}`;
   } else {
     alerta.hidden = true;
   }
@@ -103,7 +103,8 @@ function pintarSensores(d) {
     : d.estado === "FALLA GAS" ? t("sin_senal")
     : d.estado === "ALERTA GAS" ? t("ALERTA GAS") : t("ok");
 
-  $("#v-objeto").textContent = t(d.objeto ? "objeto_dentro" : "camara_vacia");
+  $("#v-objeto").textContent = d.estado === "FALLA HC-SR04" ? t("sin_eco")
+    : t(d.objeto ? "objeto_dentro" : "camara_vacia");
   $("#v-dist").textContent = d.dist === null || d.dist === undefined ? t("fuera_rango") : `${fmtNum(d.dist)} cm`;
 
   tagSalida("s-vent", d.ventilador);

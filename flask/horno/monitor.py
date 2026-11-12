@@ -28,7 +28,7 @@ from .database import BaseDatos
 log = logging.getLogger(__name__)
 
 EMERGENCIAS = {"ALERTA GAS", "SOBRETEMPERATURA", "FALLA SEGURIDAD", "FALLA GAS"}
-FALLAS = {"FALLA DHT22"}
+FALLAS = {"FALLA DHT22", "FALLA HC-SR04"}
 
 
 def tipo_evento(estado: str) -> str:
