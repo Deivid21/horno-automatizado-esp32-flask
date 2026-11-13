@@ -73,6 +73,17 @@ function repetir(tarea, ms) {
   return ciclo;  // llamar para forzar una consulta inmediata
 }
 
+/**
+ * Los límites (umbrales, objetivo y modos) los envía el ESP32. Si cambian después de
+ * cargar la página (por ejemplo, el ESP32 se conectó después), se recarga para
+ * dibujarla con los valores nuevos.
+ */
+function revisarLimites(limites) {
+  if (!limites) return;
+  const canonico = (o) => JSON.stringify(o, Object.keys(o).sort());
+  if (canonico(limites) !== canonico(window.LIMITES)) location.reload();
+}
+
 /** Agrupa eventos seguidos (como resize) en una sola llamada por cuadro. */
 function porCuadro(funcion) {
   let pendiente = false;

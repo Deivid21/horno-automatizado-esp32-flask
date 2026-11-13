@@ -92,6 +92,10 @@ journalctl -u horno -f   # ver el registro
 | GET    | `/api/eventos?limite=50`     | Últimos cambios de estado                     |
 | GET    | `/api/ciclos?limite=50`      | Últimos ciclos de secado                      |
 
-Se guarda una lectura cada 10 s y se conservan 30 días. Los valores de
-`config.py` (`TEMP_OBJETIVO`, `GAS_UMBRAL`, etc.) deben coincidir con
-`config.h` del ESP32.
+Se guarda una lectura cada 10 s y se conservan 30 días; la limpieza corre una
+vez al día. Al iniciar, los ciclos que quedaron sin terminar (por un reinicio o
+un corte de luz) se marcan como interrumpidos.
+
+Los umbrales, la temperatura objetivo y los modos de secado los envía el ESP32
+(`config.h`), y `/api/estado` los incluye en `limites`. Los de
+`LIMITES_POR_DEFECTO` en `config.py` solo se usan hasta que llegan.

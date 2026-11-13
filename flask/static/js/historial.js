@@ -56,6 +56,7 @@ async function cargar() {
   try {
     const resp = await pedirJSON(`/api/historial?horas=${horas}`);
     lecturas = resp.lecturas;
+    revisarLimites(resp.limites);
   } catch (e) {
     lecturas = [];
   }

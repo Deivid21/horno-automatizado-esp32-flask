@@ -54,13 +54,15 @@ class Simulador(threading.Thread):
         return True
 
     def enviar(self, comando: str) -> bool:
-        if comando.isdigit() and config.MODO_MIN_MINUTOS <= int(comando) <= config.MODO_MAX_MINUTOS:
+        limites = config.LIMITES_POR_DEFECTO
+        if comando.isdigit() and limites["modo_min"] <= int(comando) <= limites["modo_max"]:
             self.modo = int(comando)
             log.info("[demo] Modo de secado: %s min", self.modo)
         return True
 
     def run(self) -> None:
         log.info("Modo demo activo: datos simulados")
+        self.monitor.actualizar_limites(config.LIMITES_POR_DEFECTO)  # como el ESP32 al encender
         fase, desde, transcurrido = "vacio", time.time(), 0.0
         while True:
             ahora = time.time()
