@@ -23,8 +23,9 @@ Lee el estado del ESP32 por USB, lo guarda en SQLite y lo muestra en una
 interfaz web local. Ejecutar con:  python app.py
 """
 import logging
+from pathlib import Path
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, url_for
 
 import config
 from horno.database import BaseDatos
@@ -35,6 +36,17 @@ HISTORIAL_HORAS = (1, 6, 24)
 
 def crear_app() -> Flask:
     app = Flask(__name__)
+
+    # Archivos estáticos con versión (?v=fecha de modificación): tras un git pull el
+    # navegador descarga los nuevos en vez de usar los guardados en caché
+    @app.template_global()
+    def estatico(archivo: str) -> str:
+        ruta = Path(app.static_folder) / archivo
+        version = int(ruta.stat().st_mtime) if ruta.exists() else 0
+        return url_for("static", filename=archivo, v=version)
+
+    # Con la versión en la URL, el navegador puede guardar los estáticos sin volver a pedirlos
+    app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 30 * 86400
 
     db = BaseDatos(config.BASE_DATOS)
     db.limpiar(config.DIAS_RETENCION)
