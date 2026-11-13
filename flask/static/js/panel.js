@@ -19,6 +19,7 @@
 
 // Panel en vivo: consulta /api/estado cada 2 s y permite cambiar el modo.
 let ultimo = null;
+let consultarAhora = () => {};
 let campoPrellenado = false;
 
 function medidor(id, porcentaje, color) {
@@ -145,7 +146,7 @@ async function cambiarModo(minutos) {
     msg.textContent = t("modo_error");
   } finally {
     botones.forEach((b) => { b.disabled = false; });
-    setTimeout(refrescar, 600);
+    setTimeout(consultarAhora, 600);
   }
 }
 
@@ -168,7 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     cambiarModo(minutos);
   });
-  refrescar();
-  setInterval(refrescar, 2000);
+  consultarAhora = repetir(refrescar, 2000);
 });
 document.addEventListener("idioma", pintar);

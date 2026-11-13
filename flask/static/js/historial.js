@@ -20,6 +20,7 @@
 // Historial: gráficos de temperatura, humedad y gas desde /api/historial.
 let horas = 1;
 let lecturas = [];
+let consultarAhora = () => {};
 
 function color(nombre) {
   return getComputedStyle(document.documentElement).getPropertyValue(`--${nombre}`).trim();
@@ -66,12 +67,11 @@ document.addEventListener("DOMContentLoaded", () => {
     b.addEventListener("click", () => {
       horas = Number(b.dataset.horas);
       document.querySelectorAll("#rangos .btn").forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
-      cargar();
+      consultarAhora();
     });
   });
-  cargar();
-  setInterval(cargar, 15000);
+  consultarAhora = repetir(cargar, 15000);
 });
 document.addEventListener("idioma", pintarGraficos);
 document.addEventListener("tema", pintarGraficos);  // los colores salen de las variables CSS
-window.addEventListener("resize", pintarGraficos);
+window.addEventListener("resize", porCuadro(pintarGraficos));
