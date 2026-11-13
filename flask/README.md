@@ -62,6 +62,18 @@ Al conectarse, el ESP32 se reinicia; es normal.
 No dejes abierto el monitor serial del Arduino IDE al mismo tiempo: el puerto
 solo puede usarlo un programa.
 
+### Instalar como app en el celular
+
+El panel incluye un manifest e íconos para instalarlo como aplicación
+(pantalla completa, sin barra del navegador).
+
+- **iPhone (Safari):** Compartir → *Agregar a pantalla de inicio*.
+- **Android (Chrome):** menú ⋮ → *Agregar a la pantalla principal*.
+
+Chrome solo la instala como app independiente en un contexto seguro (HTTPS o
+`localhost`). Por la IP de la red local (`http://192.168.x.x:5000`) crea un
+acceso directo que abre el panel dentro del navegador.
+
 ### Variables de entorno
 
 | Variable           | Por defecto        | Descripción                     |
