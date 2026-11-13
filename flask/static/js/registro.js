@@ -22,7 +22,6 @@ let ciclos = [];
 let eventos = [];
 
 const COLOR_RESULTADO = { completo: "ok", interrumpido: "warn" };
-const COLOR_TIPO = { emergencia: "off", falla: "warn", completo: "ok", info: "plain" };
 
 function pintarCiclos() {
   const cuerpo = $("#t-ciclos");

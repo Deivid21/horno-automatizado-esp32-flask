@@ -19,17 +19,19 @@
 
 // Utilidades comunes de la interfaz: peticiones, formatos y estados.
 
-const ESTADOS = {
-  "STAND-BY":         { color: "plain", desc: "desc_standby" },
-  "SECANDO":          { color: "accent", desc: "desc_secando" },
-  "SECADO COMPLETO":  { color: "ok", desc: "desc_completo" },
-  "FALLA DHT22":      { color: "warn", desc: "desc_pausa", aviso: "alerta_falla" },
-  "FALLA HC-SR04":    { color: "warn", desc: "desc_pausa", aviso: "alerta_falla_presencia" },
-  "FALLA SEGURIDAD":  { color: "off", desc: "desc_pausa", emergencia: true },
-  "FALLA GAS":        { color: "off", desc: "desc_pausa", emergencia: true },
-  "SOBRETEMPERATURA": { color: "off", desc: "desc_pausa", emergencia: true },
-  "ALERTA GAS":       { color: "off", desc: "desc_pausa", emergencia: true },
-};
+// Qué estado es emergencia, falla o completo lo define el servidor (window.TIPOS_ESTADO);
+// aquí solo se decide cómo se ve cada tipo.
+const COLOR_TIPO = { emergencia: "off", falla: "warn", completo: "ok", info: "plain" };
+const DESC_ESTADO = { "STAND-BY": "desc_standby", "SECANDO": "desc_secando", "SECADO COMPLETO": "desc_completo" };
+
+function infoEstado(estado) {
+  const tipo = (window.TIPOS_ESTADO || {})[estado] || "info";
+  return {
+    tipo,
+    color: estado === "SECANDO" ? "accent" : COLOR_TIPO[tipo],
+    desc: DESC_ESTADO[estado] || (tipo === "info" ? "sin_datos" : "desc_pausa"),
+  };
+}
 
 async function pedirJSON(url, opciones) {
   const resp = await fetch(url, opciones);

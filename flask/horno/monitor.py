@@ -29,18 +29,21 @@ log = logging.getLogger(__name__)
 
 INTERVALO_LIMPIEZA_S = 24 * 3600  # las lecturas antiguas se borran una vez al día
 
-EMERGENCIAS = {"ALERTA GAS", "SOBRETEMPERATURA", "FALLA SEGURIDAD", "FALLA GAS"}
-FALLAS = {"FALLA DHT22", "FALLA HC-SR04"}
+# Tipo de cada estado del ESP32 (los que no aparecen son "info").
+# Es la única definición: la interfaz la recibe desde aquí (window.TIPOS_ESTADO).
+TIPOS_ESTADO = {
+    "ALERTA GAS": "emergencia",
+    "SOBRETEMPERATURA": "emergencia",
+    "FALLA SEGURIDAD": "emergencia",
+    "FALLA GAS": "emergencia",
+    "FALLA DHT22": "falla",
+    "FALLA HC-SR04": "falla",
+    "SECADO COMPLETO": "completo",
+}
 
 
 def tipo_evento(estado: str) -> str:
-    if estado in EMERGENCIAS:
-        return "emergencia"
-    if estado in FALLAS:
-        return "falla"
-    if estado == "SECADO COMPLETO":
-        return "completo"
-    return "info"
+    return TIPOS_ESTADO.get(estado, "info")
 
 
 class Monitor:
