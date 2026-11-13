@@ -27,6 +27,8 @@ from .database import BaseDatos
 
 log = logging.getLogger(__name__)
 
+INTERVALO_LIMPIEZA_S = 24 * 3600  # las lecturas antiguas se borran una vez al día
+
 EMERGENCIAS = {"ALERTA GAS", "SOBRETEMPERATURA", "FALLA SEGURIDAD", "FALLA GAS"}
 FALLAS = {"FALLA DHT22", "FALLA HC-SR04"}
 
@@ -42,9 +44,11 @@ def tipo_evento(estado: str) -> str:
 
 
 class Monitor:
-    def __init__(self, db: BaseDatos, intervalo_guardado_s: int):
+    def __init__(self, db: BaseDatos, intervalo_guardado_s: int, dias_retencion: int):
         self.db = db
         self.intervalo_guardado_s = intervalo_guardado_s
+        self.dias_retencion = dias_retencion
+        self._ultima_limpieza = 0.0
         self._lock = threading.Lock()
         self._datos: dict | None = None
         self._recibido = 0.0
@@ -82,6 +86,10 @@ class Monitor:
         if ahora - self._ultimo_guardado >= self.intervalo_guardado_s:
             self._ultimo_guardado = ahora
             self.db.guardar_lectura(datos)
+
+        if ahora - self._ultima_limpieza >= INTERVALO_LIMPIEZA_S:
+            self._ultima_limpieza = ahora
+            self.db.limpiar(self.dias_retencion)
 
     # ---------- Ciclos de secado ----------
     def _seguir_ciclo(self, estado: str | None, d: dict) -> None:

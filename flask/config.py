@@ -41,7 +41,7 @@ PUERTO_WEB = int(os.environ.get("HORNO_PUERTO_WEB", "5000"))
 # Base de datos
 BASE_DATOS = Path(os.environ.get("HORNO_DB", BASE_DIR / "datos" / "horno.db"))
 INTERVALO_GUARDADO_S = 10   # cada cuánto se guarda una lectura en el historial
-DIAS_RETENCION = 30         # las lecturas más antiguas se borran al iniciar
+DIAS_RETENCION = 30         # las lecturas más antiguas se borran una vez al día
 
 # Sin datos del ESP32 durante este tiempo = desconectado
 DATOS_VENCIDOS_S = 10

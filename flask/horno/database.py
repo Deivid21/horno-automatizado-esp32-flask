@@ -65,12 +65,15 @@ class BaseDatos:
         self.ruta = Path(ruta)
         self.ruta.parent.mkdir(parents=True, exist_ok=True)
         self._lock = threading.Lock()
-        with self._conexion() as con:
+        with closing(self._conexion()) as con:
+            # WAL: las lecturas del panel no esperan a las escrituras del hilo serial
+            con.execute("PRAGMA journal_mode=WAL")
             con.executescript(ESQUEMA)
 
     def _conexion(self):
         con = sqlite3.connect(self.ruta, timeout=10)
         con.row_factory = sqlite3.Row
+        con.execute("PRAGMA synchronous=NORMAL")  # seguro con WAL y menos escrituras en la SD
         return con
 
     def _escribir(self, sql: str, params: tuple = ()) -> int:
@@ -102,6 +105,7 @@ class BaseDatos:
         )
 
     def limpiar(self, dias: int) -> None:
+        """Borra las lecturas más antiguas que `dias`. Eventos y ciclos se conservan."""
         self._escribir("DELETE FROM lecturas WHERE ts < ?", (time.time() - dias * 86400,))
 
     # ---------- Eventos ----------
@@ -115,6 +119,16 @@ class BaseDatos:
         return self._leer("SELECT * FROM eventos ORDER BY ts DESC LIMIT ?", (limite,))
 
     # ---------- Ciclos ----------
+    def cerrar_ciclos_abiertos(self) -> int:
+        """Cierra los ciclos que quedaron sin terminar (servidor reiniciado o apagado)."""
+        with self._lock, closing(self._conexion()) as con, con:
+            cursor = con.execute(
+                "UPDATE ciclos SET fin = COALESCE("
+                "  (SELECT MAX(ts) FROM lecturas WHERE ts >= ciclos.inicio), inicio"
+                "), resultado = 'interrumpido' WHERE fin IS NULL"
+            )
+            return cursor.rowcount
+
     def iniciar_ciclo(self, modo: int) -> int:
         return self._escribir("INSERT INTO ciclos (inicio, modo) VALUES (?, ?)", (time.time(), modo))
 
