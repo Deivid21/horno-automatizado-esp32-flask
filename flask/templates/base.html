@@ -25,13 +25,13 @@
   <meta name="theme-color" content="#192123" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#e5f0f2" media="(prefers-color-scheme: light)">
   <script>try{var th=localStorage.getItem('theme');if(th==='light'||th==='dark')document.documentElement.dataset.theme=th}catch(e){}</script>
-  <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+  <link rel="icon" href="{{ estatico('img/favicon.svg') }}" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/tema.js') }}"></script>
+  <link rel="stylesheet" href="{{ estatico('css/style.css') }}">
+  <script src="{{ estatico('js/i18n.js') }}"></script>
+  <script src="{{ estatico('js/tema.js') }}"></script>
 </head>
 <body>
   <header class="site-header">
@@ -68,7 +68,7 @@
   </footer>
 
   <script>window.LIMITES = {{ limites | tojson }};</script>
-  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ estatico('js/app.js') }}"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>
