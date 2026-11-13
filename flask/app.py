@@ -49,8 +49,9 @@ def crear_app() -> Flask:
     app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 30 * 86400
 
     db = BaseDatos(config.BASE_DATOS)
-    db.limpiar(config.DIAS_RETENCION)
-    monitor = Monitor(db, config.INTERVALO_GUARDADO_S)
+    if cerrados := db.cerrar_ciclos_abiertos():
+        logging.getLogger(__name__).info("%d ciclo(s) sin terminar marcados como interrumpidos", cerrados)
+    monitor = Monitor(db, config.INTERVALO_GUARDADO_S, config.DIAS_RETENCION)
 
     if config.MODO_DEMO:
         from horno.simulador import Simulador
