@@ -53,7 +53,7 @@ class Monitor:
         self._datos: dict | None = None
         self._recibido = 0.0
         self._ultimo_guardado = 0.0
-        self._ciclo: dict | None = None  # {id, modo, temps, hum}
+        self._ciclo: dict | None = None  # {id, modo, suma_temp, n_temp, hum}
 
     # ---------- Entrada ----------
     def procesar_linea(self, linea: str) -> bool:
@@ -98,14 +98,17 @@ class Monitor:
         if self._ciclo is None:
             if estado != "SECANDO" or not modo:
                 return
-            self._ciclo = {"id": self.db.iniciar_ciclo(modo), "modo": modo, "temps": [], "hum": None}
+            self._ciclo = {"id": self.db.iniciar_ciclo(modo), "modo": modo,
+                           "suma_temp": 0.0, "n_temp": 0, "hum": None}
 
         if modo and modo != self._ciclo["modo"]:
             self._ciclo["modo"] = modo
             self.db.actualizar_modo_ciclo(self._ciclo["id"], modo)
 
+        # Promedio acumulado: suma y cantidad, sin guardar cada lectura en memoria
         if estado == "SECANDO" and d.get("temp") is not None:
-            self._ciclo["temps"].append(d["temp"])
+            self._ciclo["suma_temp"] += d["temp"]
+            self._ciclo["n_temp"] += 1
         if d.get("hum") is not None:
             self._ciclo["hum"] = d["hum"]
 
@@ -115,8 +118,8 @@ class Monitor:
             self._cerrar_ciclo("interrumpido")
 
     def _cerrar_ciclo(self, resultado: str) -> None:
-        temps = self._ciclo["temps"]
-        prom = round(sum(temps) / len(temps), 1) if temps else None
+        n = self._ciclo["n_temp"]
+        prom = round(self._ciclo["suma_temp"] / n, 1) if n else None
         self.db.cerrar_ciclo(self._ciclo["id"], resultado, prom, self._ciclo["hum"])
         log.info("Ciclo %s: %s", self._ciclo["id"], resultado)
         self._ciclo = None
