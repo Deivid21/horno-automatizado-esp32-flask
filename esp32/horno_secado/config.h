@@ -104,3 +104,4 @@ constexpr unsigned long INTERVALO_PRESENCIA_MS = 300;
 constexpr unsigned long INTERVALO_GAS_MS       = 500;
 constexpr unsigned long INTERVALO_PANTALLA_MS  = 1000;
 constexpr unsigned long INTERVALO_REPORTE_MS   = 2000;  // reporte en el monitor serial
+constexpr unsigned long INTERVALO_LIMITES_MS   = 30000; // límites para Flask (además de al encender)

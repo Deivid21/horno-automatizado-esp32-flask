@@ -127,6 +127,14 @@ Raspberry Pi. Las líneas que no empiezan con `{` son solo para lectura humana:
 Los valores sin lectura llegan como `null`; `restante` vale `-1` cuando no hay
 ciclo en curso.
 
+Al encender y cada 30 s también se envían los límites de `config.h`. Flask los
+usa directamente, así que los umbrales y modos se configuran solo en el ESP32:
+
+```json
+{"limites":{"modos":[5,15,30,45,60],"modo_min":1,"modo_max":180,
+ "temp_objetivo":30.0,"ds18b20_emergencia":70.0,"gas_umbral":1500}}
+```
+
 | Comando        | Acción                               |
 |----------------|--------------------------------------|
 | `5`, `15`, `30`, `45`, `60` | Modos de secado (minutos)         |
