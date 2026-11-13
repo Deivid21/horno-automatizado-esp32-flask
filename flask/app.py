@@ -64,6 +64,33 @@ def crear_app() -> Flask:
     fuente.start()
 
 
+    # ---------- Aplicación instalable (manifest) ----------
+    # Se sirve desde la raíz para que la app instalada abarque todas las páginas
+    @app.get("/manifest.webmanifest")
+    def manifest():
+        def icono(archivo, tam, uso):
+            return {"src": estatico(f"img/{archivo}"), "sizes": f"{tam}x{tam}", "type": "image/png", "purpose": uso}
+        datos = {
+            "name": "Horno de Secado",
+            "short_name": "Horno",
+            "description": "Panel del horno de secado para endoscopios",
+            "lang": "es",
+            "id": "/",
+            "start_url": "/",
+            "scope": "/",
+            "display": "standalone",
+            "background_color": "#0b1517",
+            "theme_color": "#192123",
+            "icons": [
+                icono("icon-192.png", 192, "any"),
+                icono("icon-512.png", 512, "any"),
+                icono("icon-maskable-512.png", 512, "maskable"),
+            ],
+        }
+        respuesta = jsonify(datos)
+        respuesta.mimetype = "application/manifest+json"
+        return respuesta
+
     # ---------- Páginas ----------
     @app.get("/")
     def panel():
