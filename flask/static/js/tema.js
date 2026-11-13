@@ -24,6 +24,16 @@
   const raiz = document.documentElement;
   const actual = () => raiz.dataset.theme || "auto";
 
+  // Barras del navegador y del sistema (theme-color): se mantienen ambas etiquetas
+  // y se fuerzan al tema elegido. Colores = superficie de la barra superior.
+  const BARRAS = { dark: "#192123", light: "#e5f0f2" };
+  function pintarBarras() {
+    document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
+      const propio = m.media.includes("dark") ? "dark" : "light";
+      m.content = actual() === "auto" ? BARRAS[propio] : BARRAS[actual()];
+    });
+  }
+
   function avisar() {
     document.dispatchEvent(new CustomEvent("tema"));
   }
@@ -47,11 +57,13 @@
         else localStorage.setItem("theme", siguiente);
       } catch (e) { /* almacenamiento no disponible */ }
       etiquetar(boton);
+      pintarBarras();
       avisar();
     });
 
     document.addEventListener("idioma", () => etiquetar(boton));
     etiquetar(boton);
+    pintarBarras();
   });
 
   // En modo sistema, el tema cambia si el sistema cambia
