@@ -84,6 +84,7 @@ unsigned long transcurridoMs = 0;  // tiempo de secado acumulado
 unsigned long ultimoLoop     = 0;
 unsigned long ultimaPantalla = 0;
 unsigned long ultimoReporte  = 0;
+unsigned long ultimosLimites = 0;
 
 const char* nombreEstado(Estado e) {
   switch (e) {
@@ -305,6 +306,19 @@ void enviarJSON() {
                 millis() / 1000);
 }
 
+// Límites de config.h para Flask: así el panel usa siempre los mismos valores que el ESP32
+// y no hace falta repetirlos en la Raspberry Pi.
+void enviarLimites() {
+  Serial.print("{\"limites\":{\"modos\":[");
+  for (uint8_t i = 0; i < CANTIDAD_MODOS; i++) {
+    Serial.printf(i == 0 ? "%u" : ",%u", MODOS_MINUTOS[i]);
+  }
+  Serial.printf("],\"modo_min\":%u,\"modo_max\":%u,\"temp_objetivo\":%.1f,"
+                "\"ds18b20_emergencia\":%.1f,\"gas_umbral\":%d}}\n",
+                MODO_MIN_MINUTOS, MODO_MAX_MINUTOS, TEMP_OBJETIVO,
+                DS18B20_TEMP_EMERGENCIA, GAS_UMBRAL);
+}
+
 void actualizarPantalla() {
   DatosPantalla d;
   d.temperatura = dht22.temperatura();
@@ -338,6 +352,7 @@ void setup() {
     Serial.println("[AVISO]   DS18B20 no encontrado: revisa la conexión y la pull-up de 4.7k");
   mostrarAyuda();
 
+  enviarLimites();
   buzzer.pitidoPrueba();
   pantalla.bienvenida(ds18b20.encontrado());
 
@@ -370,6 +385,10 @@ void loop() {
   if (ahora - ultimaPantalla >= INTERVALO_PANTALLA_MS) {
     ultimaPantalla = ahora;
     actualizarPantalla();
+  }
+  if (ahora - ultimosLimites >= INTERVALO_LIMITES_MS) {
+    ultimosLimites = ahora;
+    enviarLimites();
   }
   if (ahora - ultimoReporte >= INTERVALO_REPORTE_MS) {
     ultimoReporte = ahora;
