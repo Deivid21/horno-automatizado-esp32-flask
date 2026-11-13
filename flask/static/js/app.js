@@ -40,6 +40,47 @@ async function pedirJSON(url, opciones) {
 
 function $(selector) { return document.querySelector(selector); }
 
+/**
+ * Ejecuta `tarea` (async) ahora y luego cada `ms`, esperando a que termine antes de
+ * programar la siguiente. Se pausa con la pestaña oculta o el celular bloqueado y se
+ * reanuda al volver, con una consulta inmediata.
+ */
+function repetir(tarea, ms) {
+  let temporizador = null;
+  let enCurso = false;
+  let repetirAlTerminar = false;
+
+  async function ciclo() {
+    clearTimeout(temporizador);
+    temporizador = null;
+    if (document.hidden) return;
+    if (enCurso) { repetirAlTerminar = true; return; }  // nunca dos consultas a la vez
+    enCurso = true;
+    try { await tarea(); } finally {
+      enCurso = false;
+      if (repetirAlTerminar) { repetirAlTerminar = false; ciclo(); }
+      else if (!document.hidden) temporizador = setTimeout(ciclo, ms);
+    }
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) { clearTimeout(temporizador); temporizador = null; }
+    else ciclo();
+  });
+  ciclo();
+  return ciclo;  // llamar para forzar una consulta inmediata
+}
+
+/** Agrupa eventos seguidos (como resize) en una sola llamada por cuadro. */
+function porCuadro(funcion) {
+  let pendiente = false;
+  return () => {
+    if (pendiente) return;
+    pendiente = true;
+    requestAnimationFrame(() => { pendiente = false; funcion(); });
+  };
+}
+
 function fmtNum(valor, decimales = 1) {
   return valor === null || valor === undefined ? "--" : Number(valor).toFixed(decimales);
 }

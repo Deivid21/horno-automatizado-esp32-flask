@@ -66,7 +66,6 @@ async function cargar() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  cargar();
-  setInterval(cargar, 10000);
+  repetir(cargar, 10000);
 });
 document.addEventListener("idioma", pintar);
