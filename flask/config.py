@@ -46,10 +46,14 @@ DIAS_RETENCION = 30         # las lecturas más antiguas se borran una vez al d�
 # Sin datos del ESP32 durante este tiempo = desconectado
 DATOS_VENCIDOS_S = 10
 
-# Deben coincidir con config.h del ESP32
-MODOS_MINUTOS = (5, 15, 30, 45, 60)
-MODO_MIN_MINUTOS = 1      # tiempo personalizado mínimo
-MODO_MAX_MINUTOS = 180    # tiempo personalizado máximo
-TEMP_OBJETIVO = 30.0
-DS18B20_TEMP_EMERGENCIA = 70.0
-GAS_UMBRAL = 1500
+# Límites del horno: el ESP32 envía los suyos (config.h) al encender y cada 30 s,
+# y el servidor los usa en vez de estos. Estos valores solo se usan mientras no
+# llegan (y en el modo demo), así que no hace falta mantenerlos sincronizados.
+LIMITES_POR_DEFECTO = {
+    "modos": [5, 15, 30, 45, 60],
+    "modo_min": 1,        # tiempo personalizado mínimo (min)
+    "modo_max": 180,      # tiempo personalizado máximo (min)
+    "temp_objetivo": 30.0,
+    "ds18b20_emergencia": 70.0,
+    "gas_umbral": 1500,
+}

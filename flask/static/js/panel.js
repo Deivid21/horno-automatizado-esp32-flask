@@ -126,6 +126,7 @@ function pintar() {
 async function refrescar() {
   try {
     ultimo = await pedirJSON("/api/estado");
+    revisarLimites(ultimo.limites);
   } catch (e) {
     ultimo = { conectado: false, datos: ultimo ? ultimo.datos : {} };
   }

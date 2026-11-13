@@ -52,7 +52,8 @@ def crear_app() -> Flask:
     db = BaseDatos(config.BASE_DATOS)
     if cerrados := db.cerrar_ciclos_abiertos():
         logging.getLogger(__name__).info("%d ciclo(s) sin terminar marcados como interrumpidos", cerrados)
-    monitor = Monitor(db, config.INTERVALO_GUARDADO_S, config.DIAS_RETENCION)
+    monitor = Monitor(db, config.INTERVALO_GUARDADO_S, config.DIAS_RETENCION,
+                      config.LIMITES_POR_DEFECTO)
 
     if config.MODO_DEMO:
         from horno.simulador import Simulador
@@ -62,27 +63,19 @@ def crear_app() -> Flask:
         fuente = ConexionSerial(config.PUERTO_SERIAL, config.BAUDIOS, monitor)
     fuente.start()
 
-    limites = {
-        "temp_objetivo": config.TEMP_OBJETIVO,
-        "ds18b20_emergencia": config.DS18B20_TEMP_EMERGENCIA,
-        "gas_umbral": config.GAS_UMBRAL,
-        "modos": config.MODOS_MINUTOS,
-        "modo_min": config.MODO_MIN_MINUTOS,
-        "modo_max": config.MODO_MAX_MINUTOS,
-    }
 
     # ---------- Páginas ----------
     @app.get("/")
     def panel():
-        return render_template("panel.html", pagina="panel", limites=limites)
+        return render_template("panel.html", pagina="panel", limites=monitor.limites())
 
     @app.get("/historial")
     def historial():
-        return render_template("historial.html", pagina="historial", limites=limites)
+        return render_template("historial.html", pagina="historial", limites=monitor.limites())
 
     @app.get("/registro")
     def registro():
-        return render_template("registro.html", pagina="registro", limites=limites)
+        return render_template("registro.html", pagina="registro", limites=monitor.limites())
 
     # ---------- API ----------
     @app.get("/api/estado")
@@ -94,8 +87,9 @@ def crear_app() -> Flask:
     @app.post("/api/modo")
     def api_modo():
         minutos = (request.get_json(silent=True) or {}).get("minutos")
+        limites = monitor.limites()
         es_entero = isinstance(minutos, int) and not isinstance(minutos, bool)
-        if not es_entero or not config.MODO_MIN_MINUTOS <= minutos <= config.MODO_MAX_MINUTOS:
+        if not es_entero or not limites["modo_min"] <= minutos <= limites["modo_max"]:
             return jsonify(ok=False, error="modo_invalido"), 400
         if not fuente.enviar(str(minutos)):
             return jsonify(ok=False, error="sin_conexion"), 503
@@ -106,7 +100,7 @@ def crear_app() -> Flask:
         horas = request.args.get("horas", 1, type=int)
         if horas not in HISTORIAL_HORAS:
             horas = 1
-        return jsonify(horas=horas, lecturas=db.lecturas_desde(horas * 3600))
+        return jsonify(horas=horas, lecturas=db.lecturas_desde(horas * 3600), limites=monitor.limites())
 
     @app.get("/api/eventos")
     def api_eventos():

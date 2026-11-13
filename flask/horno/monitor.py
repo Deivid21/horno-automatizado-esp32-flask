@@ -46,9 +46,27 @@ def tipo_evento(estado: str) -> str:
     return TIPOS_ESTADO.get(estado, "info")
 
 
+def validar_limites(nuevos: object, actuales: dict) -> dict:
+    """Toma de `nuevos` solo las claves conocidas con el tipo correcto."""
+    if not isinstance(nuevos, dict):
+        return actuales
+    limites = dict(actuales)
+    for clave, valor in nuevos.items():
+        if clave not in actuales:
+            continue
+        if clave == "modos":
+            if isinstance(valor, list) and valor and all(isinstance(m, int) and m > 0 for m in valor):
+                limites["modos"] = valor
+        elif isinstance(valor, (int, float)) and not isinstance(valor, bool):
+            limites[clave] = valor
+    return limites
+
+
 class Monitor:
-    def __init__(self, db: BaseDatos, intervalo_guardado_s: int, dias_retencion: int):
+    def __init__(self, db: BaseDatos, intervalo_guardado_s: int, dias_retencion: int,
+                 limites: dict):
         self.db = db
+        self._limites = dict(limites)
         self.intervalo_guardado_s = intervalo_guardado_s
         self.dias_retencion = dias_retencion
         self._ultima_limpieza = 0.0
@@ -69,8 +87,21 @@ class Monitor:
         except json.JSONDecodeError:
             log.debug("Línea JSON incompleta: %s", linea)
             return False
-        self.actualizar(datos)
+        if not isinstance(datos, dict):
+            return False
+        if "limites" in datos:
+            self.actualizar_limites(datos["limites"])
+        else:
+            self.actualizar(datos)
         return True
+
+    def actualizar_limites(self, nuevos: dict) -> None:
+        with self._lock:
+            anteriores = self._limites
+            self._limites = validar_limites(nuevos, anteriores)
+            cambiaron = self._limites != anteriores
+        if cambiaron:
+            log.info("Límites recibidos del ESP32: %s", self._limites)
 
     def actualizar(self, datos: dict) -> None:
         ahora = time.time()
@@ -128,12 +159,17 @@ class Monitor:
         self._ciclo = None
 
     # ---------- Salida ----------
+    def limites(self) -> dict:
+        with self._lock:
+            return dict(self._limites)
+
     def estado(self, vencido_s: int) -> dict:
         with self._lock:
             datos = dict(self._datos) if self._datos else {}
             antiguedad = time.time() - self._recibido if self._recibido else None
         return {
             "datos": datos,
+            "limites": self.limites(),
             "conectado": antiguedad is not None and antiguedad < vencido_s,
             "antiguedad_s": round(antiguedad, 1) if antiguedad is not None else None,
         }
