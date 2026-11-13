@@ -29,13 +29,14 @@ from flask import Flask, jsonify, render_template, request, url_for
 
 import config
 from horno.database import BaseDatos
-from horno.monitor import Monitor
+from horno.monitor import TIPOS_ESTADO, Monitor
 
 HISTORIAL_HORAS = (1, 6, 24)
 
 
 def crear_app() -> Flask:
     app = Flask(__name__)
+    app.jinja_env.globals["tipos_estado"] = TIPOS_ESTADO
 
     # Archivos estáticos con versión (?v=fecha de modificación): tras un git pull el
     # navegador descarga los nuevos en vez de usar los guardados en caché

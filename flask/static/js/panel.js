@@ -44,7 +44,8 @@ function pintarConexion(estado) {
 }
 
 function pintarCiclo(d) {
-  const info = ESTADOS[d.estado] || { color: "plain", desc: "sin_datos" };
+  const info = infoEstado(d.estado);
+  const emergencia = info.tipo === "emergencia";
   const tag = $("#estado-tag");
   tag.className = claseTag(info.color);
   tag.textContent = t(d.estado);
@@ -59,7 +60,7 @@ function pintarCiclo(d) {
   const avance = d.estado === "SECADO COMPLETO" ? 100 : enCiclo ? ((total - d.restante) / total) * 100 : 0;
   const barra = $("#progreso");
   barra.style.width = `${avance}%`;
-  barra.style.background = info.emergencia ? "var(--off)" : d.estado === "SECADO COMPLETO" ? "var(--ok)" : "var(--accent)";
+  barra.style.background = emergencia ? "var(--off)" : d.estado === "SECADO COMPLETO" ? "var(--ok)" : "var(--accent)";
 
   const esFijo = window.LIMITES.modos.includes(d.modo);
   document.querySelectorAll("#modos .btn").forEach((b) => {
@@ -73,10 +74,10 @@ function pintarCiclo(d) {
   }
 
   const alerta = $("#alerta");
-  if (info.emergencia || info.aviso) {
+  if (emergencia || info.tipo === "falla") {
     alerta.hidden = false;
-    alerta.classList.toggle("alerta-warn", !info.emergencia);
-    $("#alerta-texto").textContent = `${t(d.estado)}: ${t(info.emergencia ? "alerta_emergencia" : info.aviso)}`;
+    alerta.classList.toggle("alerta-warn", !emergencia);
+    $("#alerta-texto").textContent = `${t(d.estado)}: ${t(emergencia ? "alerta_emergencia" : "alerta_falla")}`;
   } else {
     alerta.hidden = true;
   }

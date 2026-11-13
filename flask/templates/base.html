@@ -67,7 +67,10 @@
     </div>
   </footer>
 
-  <script>window.LIMITES = {{ limites | tojson }};</script>
+  <script>
+    window.LIMITES = {{ limites | tojson }};
+    window.TIPOS_ESTADO = {{ tipos_estado | tojson }};
+  </script>
   <script src="{{ estatico('js/app.js') }}"></script>
   {% block scripts %}{% endblock %}
 </body>
