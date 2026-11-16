@@ -3,6 +3,7 @@
  *
  * Copyright (C) 1996 - 2026 INACAP
  * Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+ * Copyright (C) 2023 - 2026 S&S Medical
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,132 +18,150 @@
  * limitations under the License.
  */
 
-/* Tema genérico: Material You con la paleta tonal del color semilla #00acc1.
-   Solo define variables; la estructura está en style.css. Oscuro por defecto. */
-@import url("https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
+/* Tema S&S Medical: azul marino y amarillo, los colores de la empresa.
+   Solo define variables; la estructura está en style.css. Claro por defecto.
+   Las fuentes van incluidas para que el panel se vea igual sin internet:
+   subconjuntos latinos de las fuentes variables de Google Fonts (SIL OFL 1.1). */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../fonts/Inter.woff") format("woff");
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url("../fonts/Montserrat.woff") format("woff");
+}
 
 :root {
-  /* Forma y tipografía */
-  --font: "Google Sans Flex", "Google Sans", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-titulo: var(--font);
-  --mono: "JetBrains Mono", ui-monospace, monospace;
-  --peso-titulo: 700;
-  --peso-btn: 600;
-  --sidebar-width: 272px;
-  --radio-card: 24px;
-  --radio-hero: 28px;
-  --radio-btn: 999px;
-  --radio-control: 999px;
-  --radio-tag: 8px;
-  --radio-nav: 999px;
+  /* Marca S&S Medical */
+  --navy-950: #111a32;
+  --navy-900: #1b2747;
+  --navy-700: #34486d;
+  --yellow-500: #facb08;
+  --yellow-400: #ffd83d;
 
-  /* Barra lateral y encabezado: oscuros en ambos temas */
+  /* Forma y tipografía */
+  --font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-titulo: "Montserrat", var(--font);
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --peso-titulo: 800;
+  --peso-btn: 800;
+  --sidebar-width: 272px;
+  --radio-card: 18px;
+  --radio-hero: 24px;
+  --radio-btn: 10px;
+  --radio-control: 11px;
+  --radio-tag: 999px;
+  --radio-nav: 11px;
+
+  /* Barra lateral y encabezado: azul marino en ambos temas */
   --lateral-fondo:
-    radial-gradient(circle at 42% 0%, rgba(105, 213, 232, 0.12), transparent 30%),
-    linear-gradient(180deg, #10292e, #0b1517);
-  --lateral-borde: rgba(255, 255, 255, 0.06);
-  --lateral-texto: #b4cacf;
+    radial-gradient(circle at 42% 0%, rgba(250, 203, 8, 0.11), transparent 28%),
+    linear-gradient(180deg, var(--navy-900), var(--navy-950));
+  --lateral-borde: rgba(255, 255, 255, 0.08);
+  --lateral-texto: #c8d0df;
   --lateral-titulo: #ffffff;
-  --lateral-tenue: #7f9499;
-  --lateral-icono: #8fa6ab;
-  --lateral-acento: #69d5e8;
-  --lateral-activo: rgba(105, 213, 232, 0.16);
+  --lateral-tenue: #8f9bb1;
+  --lateral-icono: #98a5ba;
+  --lateral-acento: var(--yellow-500);
+  --lateral-activo: linear-gradient(90deg, rgba(250, 203, 8, 0.19), rgba(250, 203, 8, 0.07));
   --lateral-hover: rgba(255, 255, 255, 0.06);
   --hero-fondo:
-    radial-gradient(circle at 82% 18%, rgba(105, 213, 232, 0.24), transparent 24%),
-    linear-gradient(135deg, #014e59, #0b2e34);
-  --hero-borde: transparent;
+    radial-gradient(circle at 82% 18%, rgba(250, 203, 8, 0.18), transparent 22%),
+    linear-gradient(135deg, var(--navy-900), var(--navy-950));
   --hero-titulo: #ffffff;
-  --hero-texto: #cfe7ec;
-  --hero-eyebrow: #9eefff;
-  --hero-anillo: rgba(255, 255, 255, 0.07);
-  --sombra-hero: none;
-  --card-borde: transparent;
-  --sombra-card: none;
+  --hero-texto: #cbd3e1;
+  --hero-eyebrow: var(--yellow-400);
+  --hero-anillo: rgba(255, 255, 255, 0.06);
+  --card-borde: var(--border);
 
-  /* Tema oscuro (por defecto) */
-  --bg: #0b1517;
-  --card: #192123;
-  --card-hover: #232b2d;
-  --input-bg: #232b2d;
-  --topbar-bg: rgba(11, 21, 23, 0.92);
-  --border: #374a4e;
-  --text: #d9e4e7;
-  --heading: #e6f2f4;
-  --muted: #b4cacf;
-  --icon: #b4cacf;
-  --chip-bg: #014e59;
-  --chip-text: #9eefff;
-  --tag-bg: #2d3638;
-  --accent: #69d5e8;
-  --progreso: #69d5e8;
-  --ds: #aec6ff;
+  /* Amarillo S&S para lo seleccionado en ambos temas */
+  --destacado: var(--yellow-500);
+  --destacado-hover: var(--yellow-400);
+  --sobre-destacado: var(--navy-950);
+  --progreso: var(--yellow-500);
+  --foco: rgba(250, 203, 8, 0.8);
+  --foco-suave: rgba(250, 203, 8, 0.13);
+
+  /* Tema claro (por defecto) */
+  --bg: #f4f6fa;
+  --card: #ffffff;
+  --card-hover: #f7f9fc;
+  --input-bg: #f4f6fa;
+  --topbar-bg: rgba(255, 255, 255, 0.95);
+  --border: #e0e5ee;
+  --text: #18233f;
+  --heading: var(--navy-900);
+  --muted: #6f7a91;
+  --icon: var(--navy-700);
+  --chip-bg: #fff8d8;
+  --chip-text: var(--navy-900);
+  --tag-bg: #eef1f6;
+  --accent: var(--navy-700);
+  --ds: #4a7bd0;
+  --ok: #23955a;
+  --warn: #c07f00;
+  --off: #d4404c;
+  --sombra-card: 0 10px 30px rgba(24, 35, 63, 0.06);
+  --sombra-hero: 0 18px 45px rgba(24, 35, 63, 0.09);
+  --hero-borde: transparent;
+  color-scheme: light;
+}
+
+/* Tema oscuro: sigue al sistema salvo que el interruptor elija uno (html[data-theme]).
+   El bloque se repite porque CSS no permite unir @media con un selector. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c1326;
+    --card: #151f38;
+    --card-hover: #1a2541;
+    --input-bg: #111a32;
+    --topbar-bg: rgba(17, 26, 50, 0.92);
+    --border: #26324f;
+    --text: #e3e8f2;
+    --heading: #f1f4fa;
+    --muted: #9aa5bb;
+    --icon: #c8d0df;
+    --chip-bg: rgba(250, 203, 8, 0.14);
+    --chip-text: #ffd83d;
+    --tag-bg: #1e2a48;
+    --accent: #ffd83d;
+    --ds: #8fb4ff;
+    --ok: #3fb950;
+    --warn: #d29922;
+    --off: #f0616d;
+    --sombra-card: 0 10px 30px rgba(0, 0, 0, 0.25);
+    --sombra-hero: 0 18px 45px rgba(0, 0, 0, 0.35);
+    --hero-borde: rgba(255, 255, 255, 0.07);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c1326;
+  --card: #151f38;
+  --card-hover: #1a2541;
+  --input-bg: #111a32;
+  --topbar-bg: rgba(17, 26, 50, 0.92);
+  --border: #26324f;
+  --text: #e3e8f2;
+  --heading: #f1f4fa;
+  --muted: #9aa5bb;
+  --icon: #c8d0df;
+  --chip-bg: rgba(250, 203, 8, 0.14);
+  --chip-text: #ffd83d;
+  --tag-bg: #1e2a48;
+  --accent: #ffd83d;
+  --ds: #8fb4ff;
   --ok: #3fb950;
   --warn: #d29922;
   --off: #f0616d;
-  --destacado: #69d5e8;
-  --destacado-hover: #86e3f3;
-  --sobre-destacado: #01363e;
-  --foco: rgba(105, 213, 232, 0.8);
-  --foco-suave: rgba(105, 213, 232, 0.16);
+  --sombra-card: 0 10px 30px rgba(0, 0, 0, 0.25);
+  --sombra-hero: 0 18px 45px rgba(0, 0, 0, 0.35);
+  --hero-borde: rgba(255, 255, 255, 0.07);
   color-scheme: dark;
-}
-
-/* Tema claro: sigue al sistema salvo que el interruptor elija uno (html[data-theme]).
-   El bloque se repite porque CSS no permite unir @media con un selector. */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #f0fbfe;
-    --card: #e5f0f2;
-    --card-hover: #dfeaec;
-    --input-bg: #dfeaec;
-    --topbar-bg: rgba(240, 251, 254, 0.94);
-    --border: #b4cacf;
-    --text: #151d1f;
-    --heading: #151d1f;
-    --muted: #374a4e;
-    --icon: #374a4e;
-    --chip-bg: #9eefff;
-    --chip-text: #001f24;
-    --tag-bg: #d9e4e7;
-    --accent: #006876;
-    --progreso: #006876;
-    --ds: #475d92;
-    --ok: #23955a;
-    --warn: #b07400;
-    --off: #c8303c;
-    --destacado: #006876;
-    --destacado-hover: #007f8f;
-    --sobre-destacado: #ffffff;
-    --foco: rgba(0, 104, 118, 0.7);
-    --foco-suave: rgba(0, 104, 118, 0.14);
-    color-scheme: light;
-  }
-}
-:root[data-theme="light"] {
-  --bg: #f0fbfe;
-  --card: #e5f0f2;
-  --card-hover: #dfeaec;
-  --input-bg: #dfeaec;
-  --topbar-bg: rgba(240, 251, 254, 0.94);
-  --border: #b4cacf;
-  --text: #151d1f;
-  --heading: #151d1f;
-  --muted: #374a4e;
-  --icon: #374a4e;
-  --chip-bg: #9eefff;
-  --chip-text: #001f24;
-  --tag-bg: #d9e4e7;
-  --accent: #006876;
-  --progreso: #006876;
-  --ds: #475d92;
-  --ok: #23955a;
-  --warn: #b07400;
-  --off: #c8303c;
-  --destacado: #006876;
-  --destacado-hover: #007f8f;
-  --sobre-destacado: #ffffff;
-  --foco: rgba(0, 104, 118, 0.7);
-  --foco-suave: rgba(0, 104, 118, 0.14);
-  color-scheme: light;
 }

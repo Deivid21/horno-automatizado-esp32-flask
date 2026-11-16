@@ -3,6 +3,7 @@
 
   Copyright (C) 1996 - 2026 INACAP
   Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+  Copyright (C) 2023 - 2026 S&S Medical
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -19,7 +20,9 @@
 {#- Marca del tema: lo único de la barra lateral que cambia entre temas. -#}
 
 {% macro cabecera() -%}
-<svg class="brand-icono" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="7" width="20" height="18" rx="3"/><path d="M10 13h12M10 18c1.6-1.2 2.9 1.2 4.5 0s2.9 1.2 4.5 0"/></svg>
+<a class="brand-logo-link" href="https://www.ssmedical.cl/" target="_blank" rel="noopener noreferrer" aria-label="S&amp;S Medical">
+        <img src="{{ estatico('img/logo-ss-medical.png') }}" alt="S&amp;S Medical" width="140" height="73">
+      </a>
       <a class="brand-copy" href="{{ url_for('panel') }}">
         <strong data-i18n="marca_a">Horno</strong>
         <span data-i18n="marca_b">de secado</span>
@@ -27,5 +30,5 @@
 {%- endmacro %}
 
 {% macro pie() -%}
-<small>Horno de Secado · INACAP</small>
+<small>Horno de Secado · S&amp;S Medical</small>
 {%- endmacro %}

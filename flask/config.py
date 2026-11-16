@@ -3,6 +3,7 @@
 #
 # Copyright (C) 1996 - 2026 INACAP
 # Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+# Copyright (C) 2023 - 2026 S&S Medical
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,12 +51,12 @@ DATOS_VENCIDOS_S = 10
 # instalada. Los colores y fuentes del panel están en static/css/tema.css y el
 # logo en templates/_marca.html; cambiar de tema es cambiar solo esas tres cosas.
 TEMA = {
-    "titulo": "Horno de Secado · INACAP",
-    "descripcion": "Panel del horno de secado para endoscopios",
-    "barra_oscuro": "#0b1517",   # color de la barra superior en cada tema
-    "barra_claro": "#f0fbfe",
-    "fondo_app": "#0b1517",      # pantalla de inicio de la app instalada
-    "color_app": "#10292e",
+    "titulo": "Horno de Secado | S&S Medical",
+    "descripcion": "Panel del horno de secado para endoscopios · S&S Medical",
+    "barra_oscuro": "#111931",   # color de la barra superior en cada tema
+    "barra_claro": "#ffffff",
+    "fondo_app": "#1b2747",      # pantalla de inicio de la app instalada
+    "color_app": "#1b2747",
 }
 
 # Límites del horno: el ESP32 envía los suyos (config.h) al encender y cada 30 s,

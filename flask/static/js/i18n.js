@@ -3,6 +3,7 @@
 //
 // Copyright (C) 1996 - 2026 INACAP
 // Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+// Copyright (C) 2023 - 2026 S&S Medical
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,10 +23,10 @@
 const TEXTOS = {
   es: {
     marca_a: "Horno", marca_b: "de secado", nav_label: "Navegación",
-    topbar_sub: "Horno de Secado · INACAP",
+    topbar_sub: "Horno de Secado · S&S Medical",
     nav_panel: "Panel", nav_historial: "Historial", nav_registro: "Registro",
     theme_auto: "Tema: sistema", theme_light: "Tema: claro", theme_dark: "Tema: oscuro",
-    eyebrow: "INACAP · Secado de endoscopios",
+    eyebrow: "S&S Medical · Secado de endoscopios",
     panel_titulo: "Horno de Secado",
     panel_lead: "Estado en vivo del horno, sensores y salidas.",
     conectado: "Conectado", desconectado: "Sin conexión", demo: "Demo",
@@ -71,10 +72,10 @@ const TEXTOS = {
   },
   en: {
     marca_a: "Drying", marca_b: "oven", nav_label: "Navigation",
-    topbar_sub: "Drying Oven · INACAP",
+    topbar_sub: "Drying Oven · S&S Medical",
     nav_panel: "Dashboard", nav_historial: "History", nav_registro: "Log",
     theme_auto: "Theme: system", theme_light: "Theme: light", theme_dark: "Theme: dark",
-    eyebrow: "INACAP · Endoscope drying",
+    eyebrow: "S&S Medical · Endoscope drying",
     panel_titulo: "Drying Oven",
     panel_lead: "Live status of the oven, sensors and outputs.",
     conectado: "Connected", desconectado: "Disconnected", demo: "Demo",
