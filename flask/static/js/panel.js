@@ -60,7 +60,7 @@ function pintarCiclo(d) {
   const avance = d.estado === "SECADO COMPLETO" ? 100 : enCiclo ? ((total - d.restante) / total) * 100 : 0;
   const barra = $("#progreso");
   barra.style.width = `${avance}%`;
-  barra.style.background = emergencia ? "var(--off)" : d.estado === "SECADO COMPLETO" ? "var(--ok)" : "var(--accent)";
+  barra.style.background = emergencia ? "var(--off)" : d.estado === "SECADO COMPLETO" ? "var(--ok)" : "var(--progreso)";
 
   const esFijo = window.LIMITES.modos.includes(d.modo);
   document.querySelectorAll("#modos .btn").forEach((b) => {

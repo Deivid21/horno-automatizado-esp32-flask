@@ -84,6 +84,29 @@ function revisarLimites(limites) {
   if (canonico(limites) !== canonico(window.LIMITES)) location.reload();
 }
 
+// Menú lateral: bajo 920 px la barra lateral se abre con el botón de menú
+(() => {
+  const escritorio = window.matchMedia("(min-width: 921px)");
+  function menu(abierto) {
+    const lateral = document.getElementById("sidebar");
+    const fondo = document.getElementById("mobile-overlay");
+    const boton = document.getElementById("menu-button");
+    if (!lateral) return;
+    lateral.classList.toggle("open", abierto);
+    boton?.setAttribute("aria-expanded", String(abierto));
+    if (fondo) fondo.hidden = !abierto;
+    document.body.style.overflow = abierto ? "hidden" : "";
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("menu-button")?.addEventListener("click", () => {
+      menu(!document.getElementById("sidebar").classList.contains("open"));
+    });
+    document.getElementById("mobile-overlay")?.addEventListener("click", () => menu(false));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") menu(false); });
+    escritorio.addEventListener("change", (e) => { if (e.matches) menu(false); });
+  });
+})();
+
 /** Agrupa eventos seguidos (como resize) en una sola llamada por cuadro. */
 function porCuadro(funcion) {
   let pendiente = false;

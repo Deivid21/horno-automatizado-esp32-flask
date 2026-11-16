@@ -21,9 +21,9 @@
 // traducen solos; el código usa t("clave") para los textos dinámicos.
 const TEXTOS = {
   es: {
-    marca: "Horno de Secado",
+    marca_a: "Horno", marca_b: "de secado", nav_label: "Navegación",
+    topbar_sub: "Horno de Secado · INACAP",
     nav_panel: "Panel", nav_historial: "Historial", nav_registro: "Registro",
-    pie_ramo: "Taller de Diseño de Proyectos Electrónicos",
     theme_auto: "Tema: sistema", theme_light: "Tema: claro", theme_dark: "Tema: oscuro",
     eyebrow: "INACAP · Secado de endoscopios",
     panel_titulo: "Horno de Secado",
@@ -70,9 +70,9 @@ const TEXTOS = {
     sin_ciclos: "Aún no hay ciclos registrados.", sin_eventos: "Aún no hay eventos registrados.",
   },
   en: {
-    marca: "Drying Oven",
+    marca_a: "Drying", marca_b: "oven", nav_label: "Navigation",
+    topbar_sub: "Drying Oven · INACAP",
     nav_panel: "Dashboard", nav_historial: "History", nav_registro: "Log",
-    pie_ramo: "Electronic Project Design Workshop",
     theme_auto: "Theme: system", theme_light: "Theme: light", theme_dark: "Theme: dark",
     eyebrow: "INACAP · Endoscope drying",
     panel_titulo: "Drying Oven",

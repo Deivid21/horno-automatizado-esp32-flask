@@ -37,6 +37,7 @@ HISTORIAL_HORAS = (1, 6, 24)
 def crear_app() -> Flask:
     app = Flask(__name__)
     app.jinja_env.globals["tipos_estado"] = TIPOS_ESTADO
+    app.jinja_env.globals["tema"] = config.TEMA
 
     # Archivos estáticos con versión (?v=fecha de modificación): tras un git pull el
     # navegador descarga los nuevos en vez de usar los guardados en caché
@@ -73,14 +74,14 @@ def crear_app() -> Flask:
         datos = {
             "name": "Horno de Secado",
             "short_name": "Horno",
-            "description": "Panel del horno de secado para endoscopios",
+            "description": config.TEMA["descripcion"],
             "lang": "es",
             "id": "/",
             "start_url": "/",
             "scope": "/",
             "display": "standalone",
-            "background_color": "#0b1517",
-            "theme_color": "#192123",
+            "background_color": config.TEMA["fondo_app"],
+            "theme_color": config.TEMA["color_app"],
             "icons": [
                 icono("icon-192.png", 192, "any"),
                 icono("icon-512.png", 512, "any"),

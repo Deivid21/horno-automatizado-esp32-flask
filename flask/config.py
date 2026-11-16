@@ -46,6 +46,18 @@ DIAS_RETENCION = 30         # las lecturas más antiguas se borran una vez al d�
 # Sin datos del ESP32 durante este tiempo = desconectado
 DATOS_VENCIDOS_S = 10
 
+# Tema de la interfaz: título, colores de las barras del navegador y de la app
+# instalada. Los colores y fuentes del panel están en static/css/tema.css y el
+# logo en templates/_marca.html; cambiar de tema es cambiar solo esas tres cosas.
+TEMA = {
+    "titulo": "Horno de Secado · INACAP",
+    "descripcion": "Panel del horno de secado para endoscopios",
+    "barra_oscuro": "#0b1517",   # color de la barra superior en cada tema
+    "barra_claro": "#f0fbfe",
+    "fondo_app": "#0b1517",      # pantalla de inicio de la app instalada
+    "color_app": "#10292e",
+}
+
 # Límites del horno: el ESP32 envía los suyos (config.h) al encender y cada 30 s,
 # y el servidor los usa en vez de estos. Estos valores solo se usan mientras no
 # llegan (y en el modo demo), así que no hace falta mantenerlos sincronizados.

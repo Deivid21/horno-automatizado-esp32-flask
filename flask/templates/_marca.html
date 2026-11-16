@@ -1,0 +1,31 @@
+{#
+  For more Support see: https://t.me/Deivid21Hub
+
+  Copyright (C) 1996 - 2026 INACAP
+  Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+#}
+{#- Marca del tema: lo único de la barra lateral que cambia entre temas. -#}
+
+{% macro cabecera() -%}
+<svg class="brand-icono" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="7" width="20" height="18" rx="3"/><path d="M10 13h12M10 18c1.6-1.2 2.9 1.2 4.5 0s2.9 1.2 4.5 0"/></svg>
+      <a class="brand-copy" href="{{ url_for('panel') }}">
+        <strong data-i18n="marca_a">Horno</strong>
+        <span data-i18n="marca_b">de secado</span>
+      </a>
+{%- endmacro %}
+
+{% macro pie() -%}
+<small>Horno de Secado · INACAP</small>
+{%- endmacro %}

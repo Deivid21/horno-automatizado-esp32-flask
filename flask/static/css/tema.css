@@ -1,0 +1,148 @@
+/*
+ * For more Support see: https://t.me/Deivid21Hub
+ *
+ * Copyright (C) 1996 - 2026 INACAP
+ * Copyright (C) 2017 - 2026 Deivid Ignacio Parra (Deivid21)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* Tema genérico: Material You con la paleta tonal del color semilla #00acc1.
+   Solo define variables; la estructura está en style.css. Oscuro por defecto. */
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  /* Forma y tipografía */
+  --font: "Google Sans Flex", "Google Sans", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-titulo: var(--font);
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --peso-titulo: 700;
+  --peso-btn: 600;
+  --sidebar-width: 272px;
+  --radio-card: 24px;
+  --radio-hero: 28px;
+  --radio-btn: 999px;
+  --radio-control: 999px;
+  --radio-tag: 8px;
+  --radio-nav: 999px;
+
+  /* Barra lateral y encabezado: oscuros en ambos temas */
+  --lateral-fondo:
+    radial-gradient(circle at 42% 0%, rgba(105, 213, 232, 0.12), transparent 30%),
+    linear-gradient(180deg, #10292e, #0b1517);
+  --lateral-borde: rgba(255, 255, 255, 0.06);
+  --lateral-texto: #b4cacf;
+  --lateral-titulo: #ffffff;
+  --lateral-tenue: #7f9499;
+  --lateral-icono: #8fa6ab;
+  --lateral-acento: #69d5e8;
+  --lateral-activo: rgba(105, 213, 232, 0.16);
+  --lateral-hover: rgba(255, 255, 255, 0.06);
+  --hero-fondo:
+    radial-gradient(circle at 82% 18%, rgba(105, 213, 232, 0.24), transparent 24%),
+    linear-gradient(135deg, #014e59, #0b2e34);
+  --hero-borde: transparent;
+  --hero-titulo: #ffffff;
+  --hero-texto: #cfe7ec;
+  --hero-eyebrow: #9eefff;
+  --hero-anillo: rgba(255, 255, 255, 0.07);
+  --sombra-hero: none;
+  --card-borde: transparent;
+  --sombra-card: none;
+
+  /* Tema oscuro (por defecto) */
+  --bg: #0b1517;
+  --card: #192123;
+  --card-hover: #232b2d;
+  --input-bg: #232b2d;
+  --topbar-bg: rgba(11, 21, 23, 0.92);
+  --border: #374a4e;
+  --text: #d9e4e7;
+  --heading: #e6f2f4;
+  --muted: #b4cacf;
+  --icon: #b4cacf;
+  --chip-bg: #014e59;
+  --chip-text: #9eefff;
+  --tag-bg: #2d3638;
+  --accent: #69d5e8;
+  --progreso: #69d5e8;
+  --ds: #aec6ff;
+  --ok: #3fb950;
+  --warn: #d29922;
+  --off: #f0616d;
+  --destacado: #69d5e8;
+  --destacado-hover: #86e3f3;
+  --sobre-destacado: #01363e;
+  --foco: rgba(105, 213, 232, 0.8);
+  --foco-suave: rgba(105, 213, 232, 0.16);
+  color-scheme: dark;
+}
+
+/* Tema claro: sigue al sistema salvo que el interruptor elija uno (html[data-theme]).
+   El bloque se repite porque CSS no permite unir @media con un selector. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f0fbfe;
+    --card: #e5f0f2;
+    --card-hover: #dfeaec;
+    --input-bg: #dfeaec;
+    --topbar-bg: rgba(240, 251, 254, 0.94);
+    --border: #b4cacf;
+    --text: #151d1f;
+    --heading: #151d1f;
+    --muted: #374a4e;
+    --icon: #374a4e;
+    --chip-bg: #9eefff;
+    --chip-text: #001f24;
+    --tag-bg: #d9e4e7;
+    --accent: #006876;
+    --progreso: #006876;
+    --ds: #475d92;
+    --ok: #23955a;
+    --warn: #b07400;
+    --off: #c8303c;
+    --destacado: #006876;
+    --destacado-hover: #007f8f;
+    --sobre-destacado: #ffffff;
+    --foco: rgba(0, 104, 118, 0.7);
+    --foco-suave: rgba(0, 104, 118, 0.14);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f0fbfe;
+  --card: #e5f0f2;
+  --card-hover: #dfeaec;
+  --input-bg: #dfeaec;
+  --topbar-bg: rgba(240, 251, 254, 0.94);
+  --border: #b4cacf;
+  --text: #151d1f;
+  --heading: #151d1f;
+  --muted: #374a4e;
+  --icon: #374a4e;
+  --chip-bg: #9eefff;
+  --chip-text: #001f24;
+  --tag-bg: #d9e4e7;
+  --accent: #006876;
+  --progreso: #006876;
+  --ds: #475d92;
+  --ok: #23955a;
+  --warn: #b07400;
+  --off: #c8303c;
+  --destacado: #006876;
+  --destacado-hover: #007f8f;
+  --sobre-destacado: #ffffff;
+  --foco: rgba(0, 104, 118, 0.7);
+  --foco-suave: rgba(0, 104, 118, 0.14);
+  color-scheme: light;
+}

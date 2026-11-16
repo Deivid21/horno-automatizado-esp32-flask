@@ -25,10 +25,24 @@ flask/
 │   ├── monitor.py      Último estado, eventos y ciclos de secado
 │   ├── database.py     SQLite: lecturas, eventos y ciclos
 │   └── simulador.py    Datos simulados para probar sin ESP32
-├── templates/          Páginas HTML (Jinja)
-├── static/             CSS, JS e ícono
+├── templates/          Páginas HTML (Jinja); _marca.html = logo y pie del tema
+├── static/             CSS, JS, fuentes e íconos
 └── horno.service       Servicio systemd
 ```
+
+## Temas
+
+La estructura (barra lateral, barra superior, tarjetas, gráficos) no depende del
+tema; cada tema cambia solo tres cosas:
+
+| Archivo | Qué define |
+|---------|-----------|
+| `static/css/tema.css` | Colores (claro y oscuro), fuentes, radios y sombras |
+| `templates/_marca.html` | Logo y texto de la barra lateral |
+| `TEMA` en `config.py` | Título, color de las barras del navegador y de la app instalada |
+
+Además cambian los íconos de `static/img/` y los textos `eyebrow` y
+`topbar_sub` de `static/js/i18n.js`.
 
 ## Instalación en la Raspberry Pi
 

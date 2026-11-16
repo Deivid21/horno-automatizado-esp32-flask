@@ -25,8 +25,12 @@
   const actual = () => raiz.dataset.theme || "auto";
 
   // Barras del navegador y del sistema (theme-color): se mantienen ambas etiquetas
-  // y se fuerzan al tema elegido. Colores = superficie de la barra superior.
-  const BARRAS = { dark: "#192123", light: "#e5f0f2" };
+  // y se fuerzan al tema elegido. Los colores se leen de las etiquetas del <head>
+  // (config.TEMA), así cada tema los define en un solo lugar.
+  const BARRAS = {};
+  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
+    BARRAS[m.media.includes("dark") ? "dark" : "light"] = m.content;
+  });
   function pintarBarras() {
     document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
       const propio = m.media.includes("dark") ? "dark" : "light";
