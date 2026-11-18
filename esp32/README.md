@@ -61,10 +61,10 @@ La primera condición verdadera decide el estado:
 
 | Prioridad | Estado            | Condición                          | Salidas                          | Buzzer               |
 |-----------|-------------------|------------------------------------|----------------------------------|----------------------|
-| 1         | ALERTA GAS        | MQ-2 > 1500 (tras 60 s)            | Sistema apagado                  | Continuo             |
+| 1         | ALERTA GAS        | MQ-2 > 1000 (tras 60 s)            | Sistema apagado                  | Continuo             |
 | 2         | SOBRETEMPERATURA  | DS18B20 ≥ 70 °C                    | Sistema apagado                  | Intermitente rápido  |
 | 3         | FALLA SEGURIDAD   | DS18B20 sin lecturas válidas       | Sistema apagado                  | Doble pitido         |
-| 4         | FALLA GAS         | MQ-2 < 15 durante 5 s (sin señal)  | Sistema apagado                  | Triple pitido        |
+| 4         | FALLA GAS         | MQ-2 < 15 o pin flotante por 5 s   | Sistema apagado                  | Triple pitido        |
 | 5         | FALLA DHT22       | DHT22 sin lecturas válidas         | Calefactor apagado               | Pitido cada 2 s      |
 | 6         | FALLA HC-SR04     | HC-SR04 sin eco durante 3 s        | Calefactor apagado               | Pitido largo cada 3 s|
 | 7         | STAND-BY          | HC-SR04 no detecta objeto (10 cm)  | Ventilador encendido             | —                    |
@@ -74,14 +74,21 @@ La primera condición verdadera decide el estado:
 - **Fallas de sensores:** el DHT22 y el DS18B20 fallan tras 5 lecturas
   inválidas seguidas; el MQ-2, si su lectura queda bajo `GAS_MIN_VALIDO` (15)
   durante 5 s. Un MQ-2 alimentado marca ~48 con aire limpio, así que una
-  lectura cercana a 0 significa cable cortado o módulo sin alimentación. El
+  lectura cercana a 0 significa cable cortado o módulo sin alimentación. Si el
+  cable se suelta justo en el GPIO 26, el pin queda al aire y lee ruido: en
+  cada lectura el ESP32 carga el pin a 0 y a 3.3 V y compara (prueba de carga).
+  Con el divisor conectado ambas lecturas coinciden; al aire la diferencia
+  supera `GAS_DIF_FLOTANTE` y, tras 5 s, el estado pasa a `FALLA GAS`, incluso
+  durante el precalentamiento. Las lecturas flotantes no disparan la alarma de
+  gas. Conviene poner la resistencia de 20k a GND en la misma fila del GPIO 26.
+  El
   HC-SR04 falla si no recibe eco durante 3 s: con la cámara cerrada siempre
   debería medir el objeto o la pared del fondo. Si la cámara vacía no devuelve
   eco, desactiva esta regla con `PRESENCIA_DETECTAR_FALLA` en `config.h`. En
   falla, la pantalla, el monitor serial y Flask muestran `---` en vez del
   último valor.
 - **Rearme automático:** las emergencias se liberan solas cuando los valores
-  vuelven a la normalidad (DS18B20 < 65 °C, gas < 1400).
+  vuelven a la normalidad (DS18B20 < 65 °C, gas < 900).
 - **Pausa:** durante una falla o emergencia el tiempo de secado queda en pausa
   y continúa al volver a la normalidad.
 - **Reinicio:** al retirar el objeto de la cámara el ciclo vuelve a cero.
@@ -108,7 +115,7 @@ Vent:ON   Calef:N/C
 [DHT22]   Temp: 30.1 C | Hum: 45.2 % | Objetivo: 30.0 C
 [DS18B20] Temp: 30.6 C | Limite: 70.0 C | OK
 [HC-SR04] Dist: 6.3 cm | Rango: 10 cm | Objeto dentro
-[MQ-2]    ADC: 850 | Umbral: 1500 | OK
+[MQ-2]    ADC: 850 | Umbral: 1000 | OK
 [SISTEMA] Estado: SECANDO | Modo: 30 min | Restante: 12:34
 [SALIDAS] Ventilador: ON | Calefactor: no instalado
 ```
@@ -132,7 +139,7 @@ usa directamente, así que los umbrales y modos se configuran solo en el ESP32:
 
 ```json
 {"limites":{"modos":[5,15,30,45,60],"modo_min":1,"modo_max":180,
- "temp_objetivo":30.0,"ds18b20_emergencia":70.0,"gas_umbral":1500}}
+ "temp_objetivo":30.0,"ds18b20_emergencia":70.0,"gas_umbral":1000}}
 ```
 
 | Comando        | Acción                               |

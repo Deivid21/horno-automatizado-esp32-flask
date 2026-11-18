@@ -28,7 +28,7 @@
  *   ALERTA GAS        MQ-2 sobre el umbral           -> sistema apagado
  *   SOBRETEMPERATURA  DS18B20 sobre 70 °C            -> sistema apagado
  *   FALLA SEGURIDAD   DS18B20 sin lecturas           -> sistema apagado
- *   FALLA GAS         MQ-2 sin señal                 -> sistema apagado
+ *   FALLA GAS         MQ-2 sin señal o pin flotante  -> sistema apagado
  *   FALLA DHT22       DHT22 sin lecturas             -> calefactor apagado
  *   FALLA HC-SR04     HC-SR04 sin eco                -> calefactor apagado, ciclo en pausa
  *   STAND-BY          HC-SR04 no detecta objeto      -> espera
@@ -289,16 +289,19 @@ void enviarJSON() {
   jsonFloat(hum,    sizeof(hum),    dht22.humedad());
   jsonFloat(tempDs, sizeof(tempDs), ds18b20.temperatura());
   jsonFloat(dist,   sizeof(dist),   presencia.distancia() < 0 ? NAN : presencia.distancia());
+  char gasTxt[8];  // en falla se envía null para no registrar ruido
+  if (gas.enFalla()) snprintf(gasTxt, sizeof(gasTxt), "null");
+  else               snprintf(gasTxt, sizeof(gasTxt), "%d", gas.valor());
 
   long restante = (presencia.hayObjeto() && estado != Estado::SECADO_COMPLETO) ? restanteSeg() : -1;
 
   Serial.printf("{\"temp\":%s,\"hum\":%s,\"temp_ds\":%s,\"dist\":%s,\"objeto\":%s,"
-                "\"gas\":%d,\"gas_calentando\":%s,\"estado\":\"%s\",\"modo\":%u,"
+                "\"gas\":%s,\"gas_calentando\":%s,\"estado\":\"%s\",\"modo\":%u,"
                 "\"restante\":%ld,\"ventilador\":%s,\"calefactor\":%s,"
                 "\"calefactor_instalado\":%s,\"uptime\":%lu}\n",
                 temp, hum, tempDs, dist,
                 presencia.hayObjeto() ? "true" : "false",
-                gas.valor(), gas.calentando() ? "true" : "false",
+                gasTxt, gas.calentando() ? "true" : "false",
                 nombreEstado(estado), modoMinutos, restante,
                 actuadores.ventiladorEncendido() ? "true" : "false",
                 actuadores.calefactorEncendido() ? "true" : "false",

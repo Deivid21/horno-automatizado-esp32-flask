@@ -35,9 +35,25 @@ bool SensorGas::calentando() const {
   return millis() - _inicio < GAS_PRECALENTAMIENTO_MS;
 }
 
+// Carga el pin a un nivel, lo suelta y lo lee de inmediato. Conectado, el
+// divisor lo lleva al valor real en microsegundos; al aire, conserva la carga.
+int SensorGas::leerForzado(uint8_t nivel) {
+  pinMode(_pin, OUTPUT);
+  digitalWrite(_pin, nivel);
+  delayMicroseconds(5);
+  pinMode(_pin, INPUT);
+  return analogRead(_pin);
+}
+
 void SensorGas::actualizar(unsigned long ahora) {
   if (ahora - _ultimaLectura < INTERVALO_GAS_MS) return;
   _ultimaLectura = ahora;
+
+  // Prueba de carga (pin flotante = cable suelto en el GPIO)
+  int bajo = leerForzado(LOW);
+  int alto = leerForzado(HIGH);
+  bool alAire = (alto - bajo) > GAS_DIF_FLOTANTE;
+  analogSetPinAttenuation(_pin, ADC_11db);
 
   long suma = 0;
   for (uint8_t i = 0; i < MUESTRAS; i++) {
@@ -45,6 +61,10 @@ void SensorGas::actualizar(unsigned long ahora) {
     delayMicroseconds(200);
   }
   _valor = suma / MUESTRAS;
+
+  // El cable suelto se detecta incluso durante el precalentamiento
+  if (alAire) { if (_flotante < 255) _flotante++; }
+  else        { _flotante = 0; }
 
   if (calentando()) {
     _emergencia = false;
@@ -59,15 +79,22 @@ void SensorGas::actualizar(unsigned long ahora) {
     _sinSenal = 0;
   }
 
+  // Una lectura flotante es ruido: no enciende ni apaga la alarma
+  if (alAire) return;
+
   if (_valor > GAS_UMBRAL)                        _emergencia = true;
   else if (_valor < GAS_UMBRAL - GAS_HISTERESIS)  _emergencia = false;
 }
 
 bool SensorGas::enFalla() const {
-  return _sinSenal >= GAS_LECTURAS_FALLA;
+  return _sinSenal >= GAS_LECTURAS_FALLA || flotante();
 }
 
 void SensorGas::imprimir() const {
+  if (flotante()) {
+    Serial.printf("[MQ-2]    ADC: --- | FALLA: pin sin conexión (señal flotante, revisa el cable en GPIO%d)\n", _pin);
+    return;
+  }
   if (calentando()) {
     unsigned long restante = (GAS_PRECALENTAMIENTO_MS - (millis() - _inicio)) / 1000;
     Serial.printf("[MQ-2]    ADC: %d | Precalentando (%lu s)\n", _valor, restante);

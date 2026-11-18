@@ -72,11 +72,12 @@ constexpr float DS18B20_TEMP_REARME     = 65.0f;  // °C, el sistema vuelve a op
 // ============================================================
 // Seguridad: MQ-2
 // ============================================================
-constexpr int           GAS_UMBRAL              = 1500;    // ADC 0-4095, calibrar en aire limpio
+constexpr int           GAS_UMBRAL              = 1000;    // ADC 0-4095, calibrar en aire limpio
 constexpr int           GAS_HISTERESIS          = 100;     // la alarma se apaga bajo (umbral - histéresis)
 constexpr unsigned long GAS_PRECALENTAMIENTO_MS = 60000UL; // el MQ-2 no es confiable el primer minuto
 constexpr int           GAS_MIN_VALIDO          = 15;      // bajo esto = sin señal (aire limpio marca ~48)
 constexpr uint8_t       GAS_LECTURAS_FALLA      = 10;      // lecturas seguidas sin señal (~5 s) = falla
+constexpr int           GAS_DIF_FLOTANTE        = 1500;    // prueba de carga: diferencia mayor = pin sin conexión
 
 // ============================================================
 // Presencia: HC-SR04

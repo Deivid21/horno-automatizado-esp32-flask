@@ -28,10 +28,18 @@
  * GAS_MIN_VALIDO durante GAS_LECTURAS_FALLA lecturas seguidas, el sensor
  * está desconectado o sin alimentación. La resistencia del divisor de
  * voltaje que va del GPIO a GND lleva el pin a 0 si se corta el cable.
+ *
+ * Pin flotante: si se suelta el cable justo en el GPIO, el pin queda al
+ * aire y el ADC lee ruido que sube y baja. Para detectarlo, cada lectura
+ * hace una prueba de carga: carga el pin a 0 y lo lee, luego a 3.3 V y lo
+ * lee. Con el divisor conectado ambas lecturas dan el valor real; con el
+ * pin al aire conserva la carga y la diferencia es enorme. Una lectura
+ * flotante no cuenta para la alarma de gas.
  */
 #pragma once
 
 #include <Arduino.h>
+#include "../config.h"
 
 class SensorGas {
 public:
@@ -45,12 +53,16 @@ public:
   bool calentando() const;
   bool enEmergencia() const { return _emergencia; }
   bool enFalla() const;
+  bool flotante() const { return _flotante >= GAS_LECTURAS_FALLA; }
 
 private:
+  int leerForzado(uint8_t nivel);
+
   uint8_t       _pin;
   int           _valor      = 0;
   bool          _emergencia = false;
   uint8_t       _sinSenal   = 0;
+  uint8_t       _flotante   = 0;
   unsigned long _inicio     = 0;
   unsigned long _ultimaLectura = 0;
 };
