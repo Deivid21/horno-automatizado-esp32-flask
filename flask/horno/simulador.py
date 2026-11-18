@@ -93,7 +93,7 @@ class Simulador(threading.Thread):
                 "temp_ds": round(self.temp + random.uniform(0.2, 0.8), 1),
                 "dist": round(random.uniform(4, 7), 1) if objeto else None,
                 "objeto": objeto,
-                "gas": random.randint(700, 900),
+                "gas": random.randint(150, 350),
                 "gas_calentando": ahora - self.inicio < 60,
                 "estado": estado,
                 "modo": self.modo,

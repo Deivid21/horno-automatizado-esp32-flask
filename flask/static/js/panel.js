@@ -101,8 +101,8 @@ function pintarSensores(d) {
   $("#v-gas").textContent = d.gas ?? "--";
   const pGas = (d.gas / L.gas_umbral) * 100;
   medidor("m-gas", pGas, pGas >= 100 ? "off" : pGas >= 80 ? "warn" : "ok");
-  $("#e-gas").textContent = d.gas_calentando ? t("calentando")
-    : d.estado === "FALLA GAS" ? t("sin_senal")
+  $("#e-gas").textContent = d.estado === "FALLA GAS" ? t("sin_senal")
+    : d.gas_calentando ? t("calentando")
     : d.estado === "ALERTA GAS" ? t("ALERTA GAS") : t("ok");
 
   $("#v-objeto").textContent = d.estado === "FALLA HC-SR04" ? t("sin_eco")

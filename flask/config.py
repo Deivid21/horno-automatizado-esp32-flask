@@ -67,5 +67,5 @@ LIMITES_POR_DEFECTO = {
     "modo_max": 180,      # tiempo personalizado máximo (min)
     "temp_objetivo": 30.0,
     "ds18b20_emergencia": 70.0,
-    "gas_umbral": 1500,
+    "gas_umbral": 1000,
 }
